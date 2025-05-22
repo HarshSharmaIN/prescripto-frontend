@@ -35,7 +35,7 @@ const Home = () => {
       </button>
 
       {showChatWindow && (
-        <div className="fixed bottom-16 right-6">
+        <div className="fixed bottom-16 max-sm:bottom-6 right-6">
           <div className="p-4 overflow-y-auto">
             <Chat handleClose={handleCloseChat} />
           </div>
