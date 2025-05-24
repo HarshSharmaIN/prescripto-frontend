@@ -80,7 +80,7 @@ const Profile = () => {
             />
             <img
               className="w-8 md:w-10 absolute bottom-2 right-2"
-              src={image ? null : assets.upload_icon}
+              src={assets.upload_icon}
               alt="Upload"
             />
           </div>
