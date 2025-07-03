@@ -77,7 +77,7 @@ const DoctorBlogs = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-center mb-12"
+        className="text-center mb-12 px-4"
       >
         <h1 className="text-4xl md:text-5xl font-bold text-neutral-800 mb-4">
           Medical <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Insights</span>
@@ -159,11 +159,14 @@ const DoctorBlogs = () => {
                 variants={cardVariants}
                 whileHover={{ y: -8, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => navigate(`/blog/${blog._id}`)}
-                className="group bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden border border-neutral-100"
+                onClick={() => {
+                  navigate(`/blog/${blog._id}`);
+                  window.scrollTo(0, 0);
+                }}
+                className="group bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden border border-neutral-100 flex flex-col"
               >
                 {blog.coverImg && (
-                  <div className="relative overflow-hidden h-48">
+                  <div className="relative overflow-hidden h-48 flex-shrink-0">
                     <img 
                       src={blog.coverImg} 
                       alt={blog.title}
@@ -173,7 +176,7 @@ const DoctorBlogs = () => {
                   </div>
                 )}
                 
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-1">
                   <div className="flex items-center gap-4 text-sm text-neutral-500 mb-3">
                     <div className="flex items-center gap-1">
                       <User className="w-4 h-4" />
@@ -185,17 +188,17 @@ const DoctorBlogs = () => {
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-neutral-800 mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                  <h3 className="text-xl font-bold text-neutral-800 mb-3 group-hover:text-primary transition-colors line-clamp-2 flex-shrink-0">
                     {blog.title}
                   </h3>
                   
-                  <p className="text-neutral-600 leading-relaxed mb-4 line-clamp-3">
+                  <p className="text-neutral-600 leading-relaxed mb-4 line-clamp-3 flex-1">
                     {blog.summary.substring(0, 120)}...
                   </p>
                   
                   <motion.button
                     whileHover={{ x: 5 }}
-                    className="inline-flex items-center gap-2 text-primary font-semibold hover:text-secondary transition-colors"
+                    className="inline-flex items-center gap-2 text-primary font-semibold hover:text-secondary transition-colors self-start"
                   >
                     <span>Read More</span>
                     <ChevronRight className="w-4 h-4" />

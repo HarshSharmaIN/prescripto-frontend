@@ -31,6 +31,20 @@
   .glass-effect {
     @apply bg-white/80 backdrop-blur-lg border border-white/20;
   }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 
 .my-grid {
@@ -58,6 +72,18 @@
   @apply bg-blue-700;
 }
 
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-primary\/20 {
+  scrollbar-color: rgba(95, 111, 255, 0.2) transparent;
+}
+
+.scrollbar-track-transparent {
+  scrollbar-track-color: transparent;
+}
+
 @media (max-width: 740px) {
   .active p {
     @apply text-white bg-primary;
@@ -83,4 +109,45 @@
 
 .toast-loading {
   @apply bg-gradient-to-r from-blue-500 to-indigo-500 text-white;
+}
+
+/* Ensure proper grid display */
+.grid {
+  display: grid !important;
+}
+
+/* Fix any potential z-index issues */
+.relative {
+  position: relative;
+}
+
+/* Ensure proper flex behavior */
+.flex {
+  display: flex !important;
+}
+
+.flex-col {
+  flex-direction: column !important;
+}
+
+.flex-1 {
+  flex: 1 1 0% !important;
+}
+
+/* Ensure proper visibility */
+.opacity-0 {
+  opacity: 0;
+}
+
+.opacity-100 {
+  opacity: 1;
+}
+
+/* Fix any potential overflow issues */
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.min-w-0 {
+  min-width: 0px;
 }
