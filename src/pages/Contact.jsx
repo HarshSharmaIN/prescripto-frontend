@@ -162,29 +162,6 @@ const Contact = () => {
               ))}
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl p-6 border border-primary/20"
-            >
-              <h3 className="text-xl font-bold text-neutral-800 mb-3">
-                Careers at Prescripto
-              </h3>
-              <p className="text-neutral-700 mb-4">
-                Join our team and help us revolutionize healthcare technology.
-              </p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
-              >
-                Explore Jobs
-              </motion.button>
-            </motion.div>
-          </motion.div>
-
           {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
