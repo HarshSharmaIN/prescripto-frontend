@@ -10,6 +10,26 @@
 @layer base {
   :root {
     --color-primary: #5f6fff;
+    --color-secondary: #4f46e5;
+    --color-accent: #06b6d4;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105;
+  }
+  
+  .gradient-bg {
+    @apply bg-gradient-to-br from-blue-50 via-white to-cyan-50;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  }
+  
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-lg border border-white/20;
   }
 }
 
@@ -50,4 +70,17 @@
 
 .str-video__composite-button[title="Record call"] {
   display: none !important;
+}
+
+/* Custom toast styles */
+.toast-success {
+  @apply bg-gradient-to-r from-green-500 to-emerald-500 text-white;
+}
+
+.toast-error {
+  @apply bg-gradient-to-r from-red-500 to-pink-500 text-white;
+}
+
+.toast-loading {
+  @apply bg-gradient-to-r from-blue-500 to-indigo-500 text-white;
 }

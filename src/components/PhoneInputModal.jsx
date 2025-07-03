@@ -1,9 +1,12 @@
 import React, { useContext, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Phone, Shield, Clock, CheckCircle } from 'lucide-react';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+
 import OTPModal from './OTPModal';
 import { assets } from '../assets/assets';
 import { AppContext } from '../context/AppContext';
-import { toast } from 'react-toastify';
-import axios from 'axios';
 import DetailsModal from './DetailsModal';
 
 const PhoneInputModal = ({ onClose }) => {
@@ -13,33 +16,42 @@ const PhoneInputModal = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const {backendUrl, Loader} = useContext(AppContext)
+  const { backendUrl, Loader } = useContext(AppContext);
+
+  const features = [
+    { icon: Shield, text: "Secure & Safe" },
+    { icon: Clock, text: "Quick Verification" },
+    { icon: CheckCircle, text: "Instant Access" }
+  ];
 
   const handlePhoneNumberChange = (event) => {
-    setPhoneNumber(event.target.value);
+    const value = event.target.value.replace(/\D/g, '');
+    if (value.length <= 10) {
+      setPhoneNumber(value);
+      setError('');
+    }
   };
 
   const handleGetOTPRequest = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
-      if (phoneNumber.length < 10 || phoneNumber === '') {
-        setError('Please enter correct phone number')
+      if (phoneNumber.length !== 10) {
+        setError('Please enter a valid 10-digit phone number');
         return;
       }
 
-      const {data} = await axios.post(backendUrl+'/api/user/generate-otp', {phone: phoneNumber})
+      const { data } = await axios.post(backendUrl + '/api/user/generate-otp', { phone: phoneNumber });
 
       if (data.success) {
-        toast.success(data.message)
-        setIsOTPModalOpen(true)
+        toast.success(data.message);
+        setIsOTPModalOpen(true);
       } else {
-        toast.error(data.message)
+        toast.error(data.message);
       }
-
     } catch (error) {
       console.log(error.message);
-      toast.error(error.message)
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -57,59 +69,198 @@ const PhoneInputModal = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-      <div className="fixed inset-0 bg-transparent bg-opacity-30 backdrop-filter backdrop-blur-md transition-opacity" aria-hidden="true"></div>
-      <div className="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full"> {/* Reverted max-w */}
-        <div className="bg-white **px-6 pt-6 pb-5 sm:p-8 sm:pb-6**">
-          <div className="sm:flex sm:items-start">
-            <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-              <h3 className="text-lg text-center my-5 leading-6 font-medium text-gray-900" id="modal-title">
-                Enter Phone Number
-              </h3>
-              <div className="mt-2">
-                <div className="relative rounded-md shadow-sm **mt-4**">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <img src={assets.flag} alt="Indian Flag" className="w-5 h-auto mr-2" />
-                    <span className="text-gray-500">+91</span>
-                  </div>
-                  <input
-                    type="tel"
-                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-[85vw] pl-16 sm:text-sm border-gray-300 rounded-md"
-                    placeholder="Enter your mobile number"
-                    value={phoneNumber}
-                    onChange={handlePhoneNumberChange}
-                  />
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      >
+        {/* Backdrop */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        />
+
+        {/* Modal */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          transition={{ type: "spring", duration: 0.5 }}
+          className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden"
+        >
+          {/* Header with gradient */}
+          <div className="bg-gradient-to-r from-primary to-secondary p-6 text-white relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+            
+            <div className="relative z-10 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                  <Phone className="w-6 h-6" />
                 </div>
-                {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-                <div className="mt-6 flex justify-evenly space-x-4">
-                  <button
-                    type="button"
-                    className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={onClose}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    onClick={handleGetOTPRequest}
-                    disabled={phoneNumber.length !== 10 || loading}
-                  >
-                    {loading ? <Loader color="#fff" /> : 'Get OTP'}
-                  </button>
+                <div>
+                  <h3 className="text-xl font-bold">Phone Verification</h3>
+                  <p className="text-white/80 text-sm">Secure login with OTP</p>
                 </div>
               </div>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={onClose}
+                className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </motion.button>
             </div>
           </div>
-        </div>
-      </div>
-      {isOTPModalOpen && (
-        <OTPModal phoneNumber={'+91' + phoneNumber} onClose={handleCloseOTPModal} setIsDetailsModalOpen={setIsDetailsModalOpen} />
-      )}
-      {isDetailsModalOpen && (
-        <DetailsModal phoneNumber={'+91' + phoneNumber} onClose={handleCloseDetailsModal} />
-      )}
-    </div>
+
+          {/* Content */}
+          <div className="p-6 space-y-6">
+            {/* Features */}
+            <div className="grid grid-cols-3 gap-4">
+              {features.map((feature, index) => (
+                <motion.div
+                  key={feature.text}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="text-center"
+                >
+                  <div className="w-12 h-12 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-xl flex items-center justify-center mx-auto mb-2">
+                    <feature.icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <p className="text-xs font-medium text-neutral-600">{feature.text}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Phone Input */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="space-y-4"
+            >
+              <label className="block text-sm font-semibold text-neutral-700">
+                Enter your mobile number
+              </label>
+              
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <img src={assets.flag} alt="India" className="w-6 h-4 mr-2" />
+                  <span className="text-neutral-600 font-medium">+91</span>
+                  <div className="w-px h-6 bg-neutral-300 mx-3"></div>
+                </div>
+                <input
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={handlePhoneNumberChange}
+                  placeholder="Enter 10-digit number"
+                  className="w-full pl-20 pr-4 py-4 border border-neutral-200 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 text-lg font-medium"
+                  maxLength="10"
+                />
+              </div>
+
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-red-500 text-sm flex items-center gap-2"
+                >
+                  <div className="w-4 h-4 bg-red-100 rounded-full flex items-center justify-center">
+                    <X className="w-3 h-3 text-red-500" />
+                  </div>
+                  {error}
+                </motion.p>
+              )}
+
+              {phoneNumber.length === 10 && !error && (
+                <motion.p
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-green-500 text-sm flex items-center gap-2"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  Valid phone number
+                </motion.p>
+              )}
+            </motion.div>
+
+            {/* Action Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="flex gap-3"
+            >
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={onClose}
+                className="flex-1 py-3 px-4 border border-neutral-200 text-neutral-600 rounded-xl font-semibold hover:bg-neutral-50 transition-colors"
+              >
+                Cancel
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.02, boxShadow: "0 10px 25px rgba(95, 111, 255, 0.3)" }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleGetOTPRequest}
+                disabled={phoneNumber.length !== 10 || loading}
+                className="flex-1 py-3 px-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden"
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: "100%" }}
+                  transition={{ duration: 0.6 }}
+                />
+                <span className="relative z-10">
+                  {loading ? <Loader color="#fff" /> : 'Send OTP'}
+                </span>
+              </motion.button>
+            </motion.div>
+
+            {/* Security Note */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-2xl border border-blue-100"
+            >
+              <div className="flex items-start gap-3">
+                <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-blue-900">Secure & Private</p>
+                  <p className="text-xs text-blue-700 mt-1">
+                    Your phone number is encrypted and never shared with third parties.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Modals */}
+        {isOTPModalOpen && (
+          <OTPModal 
+            phoneNumber={'+91' + phoneNumber} 
+            onClose={handleCloseOTPModal} 
+            setIsDetailsModalOpen={setIsDetailsModalOpen} 
+          />
+        )}
+        {isDetailsModalOpen && (
+          <DetailsModal 
+            phoneNumber={'+91' + phoneNumber} 
+            onClose={handleCloseDetailsModal} 
+          />
+        )}
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

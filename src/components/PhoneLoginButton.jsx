@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Phone } from "lucide-react";
 import PhoneInputModal from "./PhoneInputModal";
-import { assets } from "../assets/assets";
 
 const PhoneLoginButton = () => {
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
@@ -15,14 +16,19 @@ const PhoneLoginButton = () => {
 
   return (
     <>
-      <button
-        className="flex items-center justify-center gap-4 border border-zinc-400 w-full bg-white hover:bg-gray-100 text-blacktext-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all"
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="flex items-center justify-center gap-3 w-full bg-white border-2 border-neutral-200 hover:border-primary text-neutral-700 hover:text-primary py-4 px-6 rounded-2xl font-semibold transition-all duration-300 relative overflow-hidden group"
         onClick={handleContinueWithPhone}
         type="button"
       >
-        <img src={assets.phone_icon} alt="" className="w-4" />
-        Continue with Phone
-      </button>
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        />
+        <Phone className="w-5 h-5 relative z-10" />
+        <span className="relative z-10">Continue with Phone</span>
+      </motion.button>
 
       {isPhoneModalOpen && <PhoneInputModal onClose={handleClosePhoneModal} />}
     </>
