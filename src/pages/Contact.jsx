@@ -262,7 +262,7 @@ const Contact = () => {
           <img
             src={assets.contact_image}
             alt="Contact us"
-            className="max-w-md mx-auto rounded-3xl shadow-2xl"
+            className="max-w-full mx-auto rounded-3xl shadow-2xl"
           />
         </motion.div>
       </div>
