@@ -250,21 +250,6 @@ const Contact = () => {
             </form>
           </motion.div>
         </div>
-
-        {/* Image Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-20 text-center"
-        >
-          <img
-            src={assets.contact_image}
-            alt="Contact us"
-            className="max-w-full mx-auto rounded-3xl shadow-2xl"
-          />
-        </motion.div>
       </div>
     </div>
   );
