@@ -37,31 +37,44 @@ const Home = () => {
         <Banner />
       </div>
 
-      {/* Floating Chat Button */}
+      {/* Enhanced Floating Chat Button */}
       <motion.button
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ delay: 1, type: "spring", stiffness: 200 }}
-        whileHover={{ scale: 1.1, boxShadow: "0 10px 30px rgba(59, 130, 246, 0.4)" }}
+        whileHover={{ 
+          scale: 1.1, 
+          boxShadow: "0 20px 40px rgba(59, 130, 246, 0.4)",
+          y: -5
+        }}
         whileTap={{ scale: 0.9 }}
         onClick={handleOpenChat}
-        className="fixed bottom-8 right-8 z-40 bg-gradient-to-r from-primary to-secondary text-white p-4 rounded-full shadow-2xl hover:shadow-primary/25 transition-all duration-300"
+        className="fixed bottom-8 right-8 z-40 bg-gradient-to-r from-primary via-secondary to-accent text-white p-4 rounded-full shadow-2xl hover:shadow-primary/25 transition-all duration-300 relative overflow-hidden group"
       >
-        <MessageCircle className="w-6 h-6" />
+        {/* Animated background */}
+        <motion.div
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+          className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-accent opacity-75 rounded-full"
+        />
+        
+        {/* Button content */}
+        <div className="relative z-10">
+          <MessageCircle className="w-6 h-6" />
+        </div>
+        
+        {/* Pulse effect */}
+        <motion.div
+          animate={{ scale: [1, 1.5, 1], opacity: [0.7, 0, 0.7] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full"
+        />
       </motion.button>
 
       {/* Chat Window */}
       <AnimatePresence>
         {showChatWindow && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 100 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 100 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed bottom-24 right-8 z-50"
-          >
-            <Chat handleClose={handleCloseChat} />
-          </motion.div>
+          <Chat handleClose={handleCloseChat} />
         )}
       </AnimatePresence>
     </div>

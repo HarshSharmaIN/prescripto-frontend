@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, useContext } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import ChatInterface from "../components/ChatInterface";
 import { extractInfo } from "../utils/helpers";
 import handleChat from "../utils/handleChat";
-import { Stethoscope } from "lucide-react";
+import { Stethoscope, X, Sparkles, Bot } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
@@ -57,7 +58,7 @@ function Chat({ handleClose }) {
   useEffect(() => {
     if (currentStep === "loggedUser") {
       addMessage(
-        `Hello ${userData.name}! I'm your medical assistant. How can i help you?`,
+        `Hello ${userData.name}! I'm your medical assistant. How can I help you?`,
         "bot"
       );
       setCurrentStep("history");
@@ -188,6 +189,7 @@ function Chat({ handleClose }) {
           }`
         );
         setShowRecommendDoctorsButton(false);
+        handleClose();
       } else {
         addMessage("Sorry! But we have no Doctors at Present.", "bot");
       }
@@ -232,34 +234,85 @@ function Chat({ handleClose }) {
   };
 
   return (
-    <div className="fixed bottom-8 max-sm:bottom-17 right-0 w-full sm:w-[40vw] max-h-[90vh] p-4 sm:p-6">
-      <div className="flex flex-col rounded-2xl shadow-xl overflow-hidden border border-blue-100">
-        <div className="flex justify-between items-center bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
-          <div className="flex items-center gap-3">
-            <Stethoscope className="w-8 h-8 text-white" />
-            <h1 className="text-white text-2xl font-semibold">
-              Medical Assistant
-            </h1>
-          </div>
-          <button
-            onClick={handleClose}
-            className="text-white hover:text-gray-200 text-3xl"
-          >
-            &times;
-          </button>
-        </div>
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8, y: 100 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.8, y: 100 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="fixed bottom-8 right-8 w-full sm:w-[450px] max-h-[80vh] z-50"
+      >
+        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-neutral-200">
+          {/* Enhanced Header */}
+          <div className="relative bg-gradient-to-r from-primary via-secondary to-accent p-6 overflow-hidden">
+            {/* Animated Background Elements */}
+            <div className="absolute inset-0 opacity-20">
+              <motion.div
+                animate={{ 
+                  scale: [1, 1.2, 1],
+                  rotate: [0, 180, 360]
+                }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute top-2 left-4 w-16 h-16 bg-white rounded-full"
+              />
+              <motion.div
+                animate={{ 
+                  scale: [1.2, 1, 1.2],
+                  rotate: [360, 180, 0]
+                }}
+                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                className="absolute bottom-2 right-6 w-12 h-12 bg-white rounded-full"
+              />
+            </div>
 
-        <ChatInterface
-          messages={messages}
-          input={input}
-          setInput={setInput}
-          handleSubmit={handleSubmit}
-          chatContainerRef={chatContainerRef}
-          showRecommendDoctorsButton={showRecommendDoctorsButton}
-          handleShowRecommendedDoctors={handleShowRecommendedDoctors}
-        />
-      </div>
-    </div>
+            <div className="relative z-10 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <motion.div
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm"
+                >
+                  <Stethoscope className="w-7 h-7 text-white" />
+                </motion.div>
+                <div>
+                  <h1 className="text-white text-xl font-bold flex items-center gap-2">
+                    Medical Assistant
+                    <motion.div
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      <Sparkles className="w-5 h-5" />
+                    </motion.div>
+                  </h1>
+                  <p className="text-white/80 text-sm">AI-Powered Healthcare Support</p>
+                </div>
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={handleClose}
+                className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center hover:bg-white/30 transition-colors backdrop-blur-sm"
+              >
+                <X className="w-5 h-5 text-white" />
+              </motion.button>
+            </div>
+          </div>
+
+          {/* Chat Interface with Enhanced Styling */}
+          <div className="relative">
+            <ChatInterface
+              messages={messages}
+              input={input}
+              setInput={setInput}
+              handleSubmit={handleSubmit}
+              chatContainerRef={chatContainerRef}
+              showRecommendDoctorsButton={showRecommendDoctorsButton}
+              handleShowRecommendedDoctors={handleShowRecommendedDoctors}
+            />
+          </div>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
