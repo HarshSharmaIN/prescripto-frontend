@@ -12,7 +12,7 @@ const Header = () => {
   ];
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-cyan-50 rounded-3xl mx-2 lg:mx-3 xl:mx-4 my-8 shadow-xl min-w-[80vw]">
+    <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-cyan-50 rounded-3xl mx-2 lg:mx-3 xl:mx-4 my-8 shadow-xl max-w-[80vw]">
       {/* Enhanced Background Pattern */}
       <div className="absolute inset-0 opacity-8">
         <motion.div
