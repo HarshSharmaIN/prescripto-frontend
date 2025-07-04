@@ -257,7 +257,7 @@ const Header = () => {
                 rotate: [0, 5, 0]
               }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-1/3 -left-4 bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/50"
+              className="absolute top-0.5/3 -left-4 bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/50"
             >
               <div className="flex items-center gap-2">
                 <Star className="w-5 h-5 text-yellow-500" />
