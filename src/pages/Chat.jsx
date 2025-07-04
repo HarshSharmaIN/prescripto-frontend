@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ChatInterface from "../components/ChatInterface";
 import { extractInfo } from "../utils/helpers";
 import handleChat from "../utils/handleChat";
-import { Stethoscope, X, Sparkles, Bot } from "lucide-react";
+import { Stethoscope, X, Sparkles, Bot, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
@@ -242,7 +242,29 @@ function Chat({ handleClose }) {
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         className="fixed bottom-8 right-8 w-full sm:w-[450px] max-h-[80vh] z-50"
       >
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-neutral-200">
+        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-neutral-200 relative">
+          {/* Animated Background Elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <motion.div
+              animate={{ 
+                scale: [1, 1.2, 1],
+                rotate: [0, 180, 360],
+                x: [0, 30, 0]
+              }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute top-10 right-10 w-32 h-32 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-full blur-2xl"
+            />
+            <motion.div
+              animate={{ 
+                scale: [1.1, 1, 1.1],
+                rotate: [360, 180, 0],
+                y: [0, -20, 0]
+              }}
+              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              className="absolute bottom-10 left-10 w-24 h-24 bg-gradient-to-r from-accent/5 to-primary/5 rounded-full blur-xl"
+            />
+          </div>
+
           {/* Enhanced Header */}
           <div className="relative bg-gradient-to-r from-primary via-secondary to-accent p-6 overflow-hidden">
             {/* Animated Background Elements */}
