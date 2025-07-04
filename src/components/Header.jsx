@@ -40,7 +40,7 @@ const Header = () => {
             scale: [1, 1.1, 1]
           }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-20 left-32 w-20 h-20 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-full blur-lg"
+          className="absolute bottom-20 left-32 w-80 h-20 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-full blur-lg"
         />
       </div>
 
