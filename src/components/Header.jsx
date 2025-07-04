@@ -96,7 +96,7 @@ const Header = () => {
               className="w-36 h-auto rounded-2xl shadow-lg"
             />
             <motion.p 
-              className="text-lg leading-relaxed"
+              className="text-md leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
