@@ -79,9 +79,6 @@ export const ChatMessage = ({ message }) => {
             <ReactMarkdown
               children={message.text}
               remarkPlugins={[remarkGfm]}
-              className={`prose prose-sm max-w-none ${
-                isBot ? 'prose-neutral' : 'prose-invert'
-              }`}
             />
           </div>
           
