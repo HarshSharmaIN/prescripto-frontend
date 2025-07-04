@@ -71,7 +71,7 @@ const Header = () => {
               Book Appointment
             </motion.span>{" "}
             <motion.span 
-              className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
+              className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent mt-1"
               animate={{ 
                 backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
               }}
