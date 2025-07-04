@@ -342,17 +342,7 @@ const Login = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
             className="mt-8 text-center space-y-4"
-          >
-            <p className="text-neutral-600">
-              {activeTab === "signup" ? "Already have an account?" : "Don't have an account?"}{" "}
-              <button
-                onClick={() => setActiveTab(activeTab === "signup" ? "login" : "signup")}
-                className="text-primary font-semibold hover:text-secondary transition-colors"
-              >
-                {activeTab === "signup" ? "Sign In" : "Sign Up"}
-              </button>
-            </p>
-            
+          >            
             <p className="text-sm text-neutral-500">
               Login as Admin?{" "}
               <a
