@@ -127,7 +127,7 @@ const Header = () => {
                 y: -2
               }}
               whileTap={{ scale: 0.95 }}
-              className="group inline-flex items-center gap-3 bg-gradient-to-r from-primary to-secondary text-white px-6 py-4 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+              className="group inline-flex items-center gap-3 bg-gradient-to-r from-primary to-secondary text-white px-4 py-4 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
