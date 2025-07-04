@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Star, Upload, Eye, Trash2, FileText, Calendar, Clock, User, Award, Sparkles, Heart } from "lucide-react";
 import { AppContext } from "../context/AppContext";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import axios from "axios";
-import { Star } from "lucide-react";
 
 const AppointmentPage = () => {
   const { appointmentId } = useParams();
@@ -52,7 +53,7 @@ const AppointmentPage = () => {
 
   const handleFileUpload = async () => {
     if (!selectedFile) {
-      toast.warn("No valid file selected!");
+      toast.error("No valid file selected!");
       return;
     }
 
@@ -72,6 +73,8 @@ const AppointmentPage = () => {
         ...prev,
         { name: response.data.fileName, url: response.data.url },
       ]);
+      setSelectedFile(null);
+      toast.success("File uploaded successfully!");
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -89,7 +92,7 @@ const AppointmentPage = () => {
         { headers: { token } }
       );
       setUploadedFiles(uploadedFiles.filter((file) => file.name !== fileName));
-      toast.success("File Successfully Deleted.");
+      toast.success("File deleted successfully.");
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -111,13 +114,13 @@ const AppointmentPage = () => {
     const maxSize = 1 * 1024 * 1024;
 
     if (!allowedTypes.includes(file.type)) {
-      toast.alert(
+      toast.error(
         `Invalid file type: ${file.name}. Only JPG and PDF are allowed.`
       );
       return;
     }
     if (file.size > maxSize) {
-      toast.alert(`File too large: ${file.name}. Max allowed size is 1MB.`);
+      toast.error(`File too large: ${file.name}. Max allowed size is 1MB.`);
       return;
     }
 
@@ -132,7 +135,11 @@ const AppointmentPage = () => {
   );
 
   if (!appointmentData) {
-    return <Loader />;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-blue-50/30 flex items-center justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   const parseAppointmentDateTime = (slotDate, slotTime) => {
@@ -150,9 +157,9 @@ const AppointmentPage = () => {
 
   const handleSubmitReview = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       if (!rating) {
-        return toast.error("Please fill in all details!")
+        return toast.error("Please fill in all details!");
       }
 
       const review = {
@@ -169,8 +176,8 @@ const AppointmentPage = () => {
 
       if (data.success) {
         toast.success(data.message);
-        setRating(false)
-        setContent("")
+        setRating(false);
+        setContent("");
       } else {
         toast.error(data.message);
       }
@@ -178,266 +185,432 @@ const AppointmentPage = () => {
       console.log(error.message);
       toast.error(error.message);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-8">
-      <div className="p-6">
-        <div className="flex-1 border border-gray-300 p-4 rounded-md shadow-sm mb-6">
-          <h2 className="text-2xl font-semibold mb-4">Appointment Details</h2>
-          <p className="mb-2">
-            <span className="font-bold">Date:</span>{" "}
-            {slotDateFormat(appointmentData.slotDate)} |{" "}
-            {appointmentData.slotTime}
-          </p>
-          <p className="mb-2">
-            <span className="font-bold">Payment Status:</span>{" "}
-            {appointmentData.payment ? "Paid" : "Not Paid"}
-          </p>
-          <div className="flex flex-row gap-5">
-            {!appointmentData.cancelled && appointmentData.payment && (
-              <button className="w-20 sm:min-w-48 py-1 border rounded text-stone-500 bg-indigo-50">
-                Paid
-              </button>
-            )}
-            {!appointmentData.cancelled &&
-              appointmentData.payment &&
-              !appointmentData.isCompleted && (
-                <button
-                  onClick={() => joinMeeting(appointmentData._id)}
-                  className="w-20 text-sm text-stone-500 text-center sm:min-w-40 py-2 border rounded hover:bg-primary hover:text-white focus:bg-primary focus:text-white transition-all duration-300"
-                >
-                  {isLoading ? <Loader color="#fff" /> : "Join"}
-                </button>
-              )}
-            {!isPastAppointment &&
-              !appointmentData.cancelled &&
-              !appointmentData.payment && (
-                <button
-                  onClick={() => paymentRazorpay(appointmentData._id)}
-                  className="w-20 text-sm text-stone-500 text-center sm:min-w-40 py-2 border rounded hover:bg-primary hover:text-white transition-all duration-300"
-                >
-                  Pay Online
-                </button>
-              )}
-            {!isPastAppointment && !appointmentData.cancelled && (
-              <button
-                onClick={() => cancelAppointment(appointmentData._id)}
-                className="w-40 text-sm text-stone-500 text-center sm:min-w-40 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300"
-              >
-                Cancel Appointment
-              </button>
-            )}
-            {appointmentData.cancelled && !appointmentData.isCompleted && (
-              <button className="sm:min-w-48 py-2 border-red-500 rounded text-red-500">
-                Appointment cancelled
-              </button>
-            )}
-            {appointmentData.isCompleted && (
-              <button className="w-30 sm:min-w-48 py-2 border border-green-500 rounded text-green-500">
-                Completed
-              </button>
-            )}
-          </div>
-        </div>
-
-        <hr className="border-gray-300 my-6" />
-
-        <div className="flex flex-col lg:flex-row space-x-4 gap-4">
-          <div className="flex-1 border border-gray-300 p-4 rounded-md shadow-sm mx-auto">
-            <h2 className="text-xl font-semibold mb-4">Doctor Details</h2>
-            <img
-              src={appointmentData.docData.image}
-              alt={appointmentData.docData.name}
-              className="w-20 h-20 rounded-full mb-4"
-            />
-            <p className="mb-2">
-              <span className="font-bold">Name:</span>{" "}
-              {appointmentData.docData.name}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Speciality:</span>{" "}
-              {appointmentData.docData.speciality}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Degree:</span>{" "}
-              {appointmentData.docData.degree}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Experience:</span>{" "}
-              {appointmentData.docData.experience}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Fees:</span> ₹
-              {appointmentData.docData.fees}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Address:</span>{" "}
-              {appointmentData.docData.address.line1},{" "}
-              {appointmentData.docData.address.line2}
-            </p>
-          </div>
-
-          <div className="flex-1 border border-gray-300 p-4 rounded-md shadow-sm mx-auto">
-            <h2 className="text-xl font-semibold mb-4">User Details</h2>
-            <img
-              src={appointmentData.userData.image}
-              alt={appointmentData.userData.name}
-              className="w-20 h-20 rounded-full mb-4"
-            />
-            <p className="mb-2">
-              <span className="font-bold">Name:</span>{" "}
-              {appointmentData.userData.name}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Email:</span>{" "}
-              {appointmentData.userData.email}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Phone:</span>{" "}
-              {appointmentData.userData.phone}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Gender:</span>{" "}
-              {appointmentData.userData.gender}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">DOB:</span>{" "}
-              {appointmentData.userData.dob}
-            </p>
-            <p className="mb-2">
-              <span className="font-bold">Address:</span>{" "}
-              {appointmentData.userData.address.line1},{" "}
-              {appointmentData.userData.address.line2}
-            </p>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-blue-50/30 py-8">
+      {/* Background Decoration */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <motion.div
+          animate={{ 
+            scale: [1, 1.2, 1],
+            rotate: [0, 180, 360],
+            x: [0, 40, 0]
+          }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{ 
+            scale: [1.1, 1, 1.1],
+            rotate: [360, 180, 0],
+            y: [0, -30, 0]
+          }}
+          transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-accent/5 to-primary/5 rounded-full blur-3xl"
+        />
       </div>
 
-      <div className="flex-1 space-y-8 p-6">
-        {!appointmentData.cancelled && !appointmentData.isCompleted && (
-          <div className="border border-gray-300 p-4 rounded-md shadow-sm">
-            <h3 className="text-xl font-semibold mb-4">Upload Area</h3>
-            <input
-              type="file"
-              accept=".jpg,.jpeg,.pdf,.png"
-              onChange={validateFiles}
-              className="block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-md file:border-0
-              file:text-sm file:font-semibold
-              file:bg-blue-50 file:text-blue-700
-              hover:file:bg-blue-100"
-            />
-            <button
-              className="w-20 text-sm text-stone-500 text-center sm:min-w-48 py-2 mt-4 border rounded hover:bg-primary hover:text-white focus:bg-primary focus:text-white transition-all duration-300"
-              onClick={handleFileUpload}
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-12"
+        >
+          <motion.div
+            animate={{ rotate: [0, 5, -5, 0] }}
+            transition={{ duration: 4, repeat: Infinity }}
+            className="inline-flex items-center gap-3 mb-6"
+          >
+            <Calendar className="w-8 h-8 text-primary" />
+            <h1 className="text-4xl md:text-5xl font-bold text-neutral-800">
+              Appointment <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Details</span>
+            </h1>
+            <Calendar className="w-8 h-8 text-secondary" />
+          </motion.div>
+        </motion.div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          {/* Left Column - Appointment & Doctor Info */}
+          <div className="xl:col-span-2 space-y-8">
+            {/* Appointment Details Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-neutral-100 p-8 relative overflow-hidden"
             >
-              {isLoading ? <Loader color="#fff" /> : "Upload"}
-            </button>
-          </div>
-        )}
+              <motion.div
+                className="absolute top-4 right-4 opacity-10"
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              >
+                <Sparkles className="w-12 h-12 text-primary" />
+              </motion.div>
 
-        {!appointmentData.cancelled && (
-          <div className="space-y-8">
-            <div className="border border-gray-300 p-4 rounded-md shadow-sm">
-              <h3 className="text-xl font-semibold mb-4">Uploaded Files</h3>
-              {otherFiles.length > 0 ? (
-                <div>
-                  {otherFiles.map((file, index) => (
-                    <div
-                      key={index}
-                      className="p-4 border border-gray-300 rounded-md shadow-md flex flex-col"
-                    >
-                      <p className="text-lg font-medium text-gray-700 mb-3">
-                        {file.name.split("/")[1] || file.name}
-                      </p>
-                      <div className="flex gap-2 w-full">
-                        <button
-                          onClick={() => window.open(file.url, "_blank")}
-                          className="flex-1 py-2 px-4 text-sm font-semibold text-gray-800 bg-yellow-400 rounded-md shadow-sm transition hover:bg-yellow-500"
-                        >
-                          View
-                        </button>
-                        <button
-                          onClick={() => handleDeleteFile(file.name)}
-                          className="flex-1 py-2 px-4 text-sm font-semibold text-gray-800 bg-red-500 rounded-md shadow-sm transition hover:bg-red-600"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <Calendar className="w-6 h-6 text-primary" />
+                  <h2 className="text-2xl font-bold text-neutral-800">Appointment Information</h2>
                 </div>
-              ) : (
-                <p className="text-gray-500">No files uploaded yet.</p>
-              )}
-            </div>
 
-            {prescriptionFiles.length > 0 && (
-              <div className="border border-gray-300 p-4 rounded-md shadow-sm">
-                <h3 className="text-xl font-semibold mb-4">Prescription</h3>
-                <div className="flex h-[20vh] max-w-[40vw] overflow-x-scroll gap-3">
-                  {prescriptionFiles.map((file, index) => (
-                    <div
-                      key={index}
-                      className="p-4 border border-gray-300 rounded-md shadow-md flex flex-col"
-                    >
-                      <p className="text-lg font-medium text-gray-700 mb-3 truncate">
-                        {file.name.split("/")[1] || file.name}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <motion.div
+                    whileHover={{ x: 5 }}
+                    className="flex items-center gap-3 bg-neutral-50 rounded-2xl p-4"
+                  >
+                    <Calendar className="w-5 h-5 text-primary" />
+                    <div>
+                      <p className="text-sm font-semibold text-neutral-600">Date & Time</p>
+                      <p className="text-lg font-bold text-neutral-800">
+                        {slotDateFormat(appointmentData.slotDate)} | {appointmentData.slotTime}
                       </p>
-                      <div className="flex gap-2 w-full">
-                        <button
-                          onClick={() => window.open(file.url, "_blank")}
-                          className="flex-1 py-2 px-4 text-sm font-semibold text-gray-800 bg-yellow-400 rounded-md shadow-sm transition hover:bg-yellow-500"
-                        >
-                          View
-                        </button>
-                      </div>
                     </div>
-                  ))}
+                  </motion.div>
+
+                  <motion.div
+                    whileHover={{ x: 5 }}
+                    className="flex items-center gap-3 bg-neutral-50 rounded-2xl p-4"
+                  >
+                    <Award className="w-5 h-5 text-secondary" />
+                    <div>
+                      <p className="text-sm font-semibold text-neutral-600">Payment Status</p>
+                      <p className={`text-lg font-bold ${appointmentData.payment ? 'text-green-600' : 'text-red-600'}`}>
+                        {appointmentData.payment ? "Paid" : "Not Paid"}
+                      </p>
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-4 mt-8">
+                  {!appointmentData.cancelled && appointmentData.payment && (
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      className="flex items-center gap-3 bg-green-100 text-green-700 px-6 py-3 rounded-2xl font-semibold border border-green-200"
+                    >
+                      <Award className="w-5 h-5" />
+                      Paid
+                    </motion.div>
+                  )}
+
+                  {!appointmentData.cancelled && appointmentData.payment && !appointmentData.isCompleted && (
+                    <motion.button
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => joinMeeting(appointmentData._id)}
+                      className="flex items-center gap-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-2xl font-semibold hover:shadow-lg transition-all duration-300"
+                    >
+                      {isLoading ? <Loader color="#fff" /> : <><Eye className="w-5 h-5" />Join Meeting</>}
+                    </motion.button>
+                  )}
+
+                  {!isPastAppointment && !appointmentData.cancelled && !appointmentData.payment && (
+                    <motion.button
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => paymentRazorpay(appointmentData._id)}
+                      className="flex items-center gap-3 bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-2xl font-semibold hover:shadow-lg transition-all duration-300"
+                    >
+                      <Award className="w-5 h-5" />
+                      Pay Online
+                    </motion.button>
+                  )}
+
+                  {!isPastAppointment && !appointmentData.cancelled && (
+                    <motion.button
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => cancelAppointment(appointmentData._id)}
+                      className="flex items-center gap-3 bg-red-100 hover:bg-red-500 text-red-600 hover:text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 border border-red-200"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                      Cancel
+                    </motion.button>
+                  )}
                 </div>
               </div>
-            )}
-          </div>
-        )}
+            </motion.div>
 
-        <div className="border border-gray-300 p-4 rounded-md shadow-sm">
-          <h3 className="text-xl font-semibold mb-4">Add Review</h3>
-          <div className="mb-4">
-            <label className="text-lg font-medium text-gray-700 mb-2">
-              Rating
-            </label>
-            <div className="flex gap-2">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  className={`text-xl ${
-                    star <= rating ? "text-yellow-400" : "text-gray-300"
-                  }`}
-                  onClick={() => setRating(star)}
-                >
-                  <Star />
-                </button>
-              ))}
+            {/* Doctor & Patient Info */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Doctor Details */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-neutral-100 p-8"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <User className="w-6 h-6 text-primary" />
+                  <h3 className="text-xl font-bold text-neutral-800">Doctor Details</h3>
+                </div>
+
+                <div className="text-center mb-6">
+                  <motion.img
+                    whileHover={{ scale: 1.05 }}
+                    src={appointmentData.docData.image}
+                    alt={appointmentData.docData.name}
+                    className="w-24 h-24 rounded-2xl mx-auto mb-4 object-cover shadow-lg"
+                  />
+                  <h4 className="text-xl font-bold text-neutral-800">{appointmentData.docData.name}</h4>
+                  <p className="text-primary font-semibold">{appointmentData.docData.speciality}</p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-neutral-600">Degree:</span>
+                    <span className="font-semibold">{appointmentData.docData.degree}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-neutral-600">Experience:</span>
+                    <span className="font-semibold">{appointmentData.docData.experience}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-neutral-600">Fees:</span>
+                    <span className="font-semibold">₹{appointmentData.docData.fees}</span>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Patient Details */}
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-neutral-100 p-8"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <Heart className="w-6 h-6 text-red-500" />
+                  <h3 className="text-xl font-bold text-neutral-800">Patient Details</h3>
+                </div>
+
+                <div className="text-center mb-6">
+                  <motion.img
+                    whileHover={{ scale: 1.05 }}
+                    src={appointmentData.userData.image}
+                    alt={appointmentData.userData.name}
+                    className="w-24 h-24 rounded-2xl mx-auto mb-4 object-cover shadow-lg"
+                  />
+                  <h4 className="text-xl font-bold text-neutral-800">{appointmentData.userData.name}</h4>
+                  <p className="text-neutral-600">{appointmentData.userData.email}</p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-neutral-600">Phone:</span>
+                    <span className="font-semibold">{appointmentData.userData.phone}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-neutral-600">Gender:</span>
+                    <span className="font-semibold">{appointmentData.userData.gender}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-neutral-600">DOB:</span>
+                    <span className="font-semibold">{appointmentData.userData.dob}</span>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
-          <textarea
-            className="block w-full text-sm text-gray-700 p-2 border border-gray-300 rounded-md"
-            rows="4"
-            placeholder="Write your review here..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-          />
-          <button
-            className="mt-4 py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-sm transition hover:bg-blue-600"
-            onClick={handleSubmitReview}
-          >
-            {isLoading ? <Loader color="#fff" /> : 'Submit Review'}
-          </button>
+
+          {/* Right Column - Files & Review */}
+          <div className="space-y-8">
+            {/* File Upload Section */}
+            {!appointmentData.cancelled && !appointmentData.isCompleted && (
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-neutral-100 p-8"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <Upload className="w-6 h-6 text-primary" />
+                  <h3 className="text-xl font-bold text-neutral-800">Upload Files</h3>
+                </div>
+
+                <div className="space-y-4">
+                  <input
+                    type="file"
+                    accept=".jpg,.jpeg,.pdf,.png"
+                    onChange={validateFiles}
+                    className="block w-full text-sm text-neutral-500 file:mr-4 file:py-3 file:px-6 file:rounded-2xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-all duration-300"
+                  />
+                  
+                  {selectedFile && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="p-4 bg-blue-50 rounded-2xl border border-blue-200"
+                    >
+                      <p className="text-sm font-semibold text-blue-800">Selected: {selectedFile.name}</p>
+                    </motion.div>
+                  )}
+
+                  <motion.button
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleFileUpload}
+                    disabled={!selectedFile || isLoading}
+                    className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-2xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50"
+                  >
+                    {isLoading ? <Loader color="#fff" /> : "Upload File"}
+                  </motion.button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Uploaded Files */}
+            {otherFiles.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1 }}
+                className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-neutral-100 p-8"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <FileText className="w-6 h-6 text-secondary" />
+                  <h3 className="text-xl font-bold text-neutral-800">Uploaded Files</h3>
+                </div>
+
+                <div className="space-y-4">
+                  {otherFiles.map((file, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="flex items-center justify-between p-4 bg-neutral-50 rounded-2xl border border-neutral-200"
+                    >
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-5 h-5 text-primary" />
+                        <span className="font-medium text-neutral-700 truncate">
+                          {file.name.split("/")[1] || file.name}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => window.open(file.url, "_blank")}
+                          className="p-2 bg-blue-100 text-blue-600 rounded-xl hover:bg-blue-200 transition-colors"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </motion.button>
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => handleDeleteFile(file.name)}
+                          className="p-2 bg-red-100 text-red-600 rounded-xl hover:bg-red-200 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </motion.button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Prescriptions */}
+            {prescriptionFiles.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.2 }}
+                className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-neutral-100 p-8"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <FileText className="w-6 h-6 text-green-600" />
+                  <h3 className="text-xl font-bold text-neutral-800">Prescriptions</h3>
+                </div>
+
+                <div className="space-y-4">
+                  {prescriptionFiles.map((file, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="flex items-center justify-between p-4 bg-green-50 rounded-2xl border border-green-200"
+                    >
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-5 h-5 text-green-600" />
+                        <span className="font-medium text-green-800 truncate">
+                          {file.name.split("/")[1] || file.name}
+                        </span>
+                      </div>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => window.open(file.url, "_blank")}
+                        className="p-2 bg-green-100 text-green-600 rounded-xl hover:bg-green-200 transition-colors"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </motion.button>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Review Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.4 }}
+              className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-neutral-100 p-8"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Star className="w-6 h-6 text-yellow-500" />
+                <h3 className="text-xl font-bold text-neutral-800">Add Review</h3>
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-lg font-semibold text-neutral-700 mb-3">Rating</label>
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <motion.button
+                        key={star}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setRating(star)}
+                        className={`p-1 ${star <= rating ? "text-yellow-500" : "text-neutral-300"}`}
+                      >
+                        <Star className="w-8 h-8 fill-current" />
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-lg font-semibold text-neutral-700 mb-3">Review</label>
+                  <textarea
+                    className="w-full p-4 border border-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                    rows="4"
+                    placeholder="Share your experience..."
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                  />
+                </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleSubmitReview}
+                  disabled={!rating || isLoading}
+                  className="w-full bg-gradient-to-r from-primary to-secondary text-white py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 disabled:opacity-50"
+                >
+                  {isLoading ? <Loader color="#fff" /> : "Submit Review"}
+                </motion.button>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </div>

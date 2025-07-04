@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
-import { toast } from "react-toastify";
+import { motion } from "framer-motion";
+import { User, Mail, Phone, MapPin, Calendar, Edit3, Save, X, Camera, Shield, Award } from "lucide-react";
+import { toast } from "react-hot-toast";
 import axios from "axios";
 
 import { AppContext } from "../context/AppContext";
@@ -65,219 +67,415 @@ const Profile = () => {
     }
   };
 
-  return !userData ? (
-    <Loader />
-  ) : (
-    <div className="max-w-lg w-full max-sm:mx-auto p-4 flex flex-col gap-4 text-sm">
-      {/* Profile Image Section */}
-      {isEdit ? (
-        <label htmlFor="image" className="block">
-          <div className="relative inline-block cursor-pointer">
-            <img
-              className="w-28 md:w-36 rounded opacity-75"
-              src={image ? URL.createObjectURL(image) : userData.image}
-              alt="Profile"
-            />
-            <img
-              className="w-8 md:w-10 absolute bottom-2 right-2"
-              src={assets.upload_icon}
-              alt="Upload"
-            />
-          </div>
-          <input
-            onChange={(e) => setImage(e.target.files[0])}
-            type="file"
-            id="image"
-            hidden
-          />
-        </label>
-      ) : (
-        <img
-          className="w-28 md:w-36 rounded max-sm:mx-auto"
-          src={userData.image}
-          alt="Profile"
+  if (!userData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-blue-50/30 flex items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-blue-50/30 py-8">
+      {/* Background Decoration */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <motion.div
+          animate={{ 
+            scale: [1, 1.2, 1],
+            rotate: [0, 180, 360],
+            x: [0, 30, 0]
+          }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-full blur-3xl"
         />
-      )}
-
-      {/* Name Section */}
-      {isEdit ? (
-        <div className="flex max-sm:items-center border rounded-2xl border-gray-400 p-2">
-          <img
-            src={assets.edit_icon}
-            alt="Edit"
-            className="bg-gray-50 w-6 md:w-[25px] mx-2"
-          />
-          <input
-            className="bg-gray-50 text-xl md:text-3xl font-medium w-full"
-            type="text"
-            value={userData.name}
-            onChange={(e) =>
-              setUserData((prev) => ({ ...prev, name: e.target.value }))
-            }
-          />
-        </div>
-      ) : (
-        <p className="font-medium text-xl md:text-3xl text-neutral-800 mt-4 max-sm:text-center">
-          {userData.name}
-        </p>
-      )}
-
-      <hr className="bg-zinc-400 h-px border-none" />
-
-      {/* Contact Information Section */}
-      <div>
-        <p className="text-neutral-500 underline mt-3">CONTACT INFORMATION</p>
-        <div className="grid grid-cols-1 sm:grid-cols-[1fr_3fr] gap-y-2.5 mt-3 text-neutral-700">
-          <p className="font-medium">Email id:</p>
-          <p className="text-blue-500">{userData.email}</p>
-
-          <p className="font-medium">Phone:</p>
-          {isEdit ? (
-            <div className="flex items-center border rounded-2xl border-gray-400 p-1">
-              <img
-                src={assets.edit_icon}
-                alt="Edit"
-                className="bg-gray-50 w-4 md:w-[15px] mx-2"
-              />
-              <input
-                className="bg-gray-100 w-full"
-                type="text"
-                value={userData.phone}
-                onChange={(e) =>
-                  setUserData((prev) => ({ ...prev, phone: e.target.value }))
-                }
-              />
-            </div>
-          ) : (
-            <p className="text-blue-400">{userData.phone}</p>
-          )}
-
-          <p className="font-medium">Address:</p>
-          {isEdit ? (
-            <div>
-              <div className="flex items-center border rounded-2xl border-gray-400 p-1 mb-2">
-                <img
-                  src={assets.edit_icon}
-                  alt="Edit"
-                  className="bg-gray-50 w-4 md:w-[15px] mx-2"
-                />
-                <input
-                  className="bg-gray-50 w-full"
-                  type="text"
-                  value={userData.address.line1}
-                  onChange={(e) =>
-                    setUserData((prev) => ({
-                      ...prev,
-                      address: { ...prev.address, line1: e.target.value },
-                    }))
-                  }
-                />
-              </div>
-              <div className="flex items-center border rounded-2xl border-gray-400 p-1">
-                <img
-                  src={assets.edit_icon}
-                  alt="Edit"
-                  className="bg-gray-50 w-4 md:w-[15px] mx-2"
-                />
-                <input
-                  className="bg-gray-50 w-full"
-                  type="text"
-                  value={userData.address.line2}
-                  onChange={(e) =>
-                    setUserData((prev) => ({
-                      ...prev,
-                      address: { ...prev.address, line2: e.target.value },
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          ) : (
-            <p className="text-gray-500">
-              {userData.address.line1}
-              <br />
-              {userData.address.line2}
-            </p>
-          )}
-        </div>
+        <motion.div
+          animate={{ 
+            scale: [1.1, 1, 1.1],
+            rotate: [360, 180, 0],
+            y: [0, -20, 0]
+          }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-20 right-10 w-72 h-72 bg-gradient-to-r from-accent/5 to-primary/5 rounded-full blur-3xl"
+        />
       </div>
 
-      {/* Basic Information Section */}
-      <div>
-        <p className="text-neutral-500 underline mt-3">BASIC INFORMATION</p>
-        <div className="grid grid-cols-1 sm:grid-cols-[1fr_3fr] gap-y-2.5 mt-3 text-neutral-700">
-          <p className="font-medium">Gender:</p>
-          {isEdit ? (
-            <div className="flex items-center">
-              <img
-                src={assets.edit_icon}
-                alt="Edit"
-                className="bg-gray-50 w-4 md:w-[15px] mx-2"
-              />
-              <select
-                className="w-full bg-gray-100"
-                value={userData.gender}
-                onChange={(e) =>
-                  setUserData((prev) => ({ ...prev, gender: e.target.value }))
-                }
+      <div className="max-w-4xl mx-auto px-4">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-12"
+        >
+          <motion.div
+            animate={{ rotate: [0, 5, -5, 0] }}
+            transition={{ duration: 4, repeat: Infinity }}
+            className="inline-flex items-center gap-3 mb-6"
+          >
+            <User className="w-8 h-8 text-primary" />
+            <h1 className="text-4xl md:text-5xl font-bold text-neutral-800">
+              My <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Profile</span>
+            </h1>
+            <User className="w-8 h-8 text-secondary" />
+          </motion.div>
+          <motion.p 
+            className="text-xl text-neutral-600 max-w-2xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            Manage your personal information and account settings.
+          </motion.p>
+        </motion.div>
+
+        {/* Profile Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-neutral-100 overflow-hidden relative"
+        >
+          {/* Decorative elements */}
+          <motion.div
+            className="absolute top-4 right-4 opacity-10"
+            animate={{ rotate: [0, 360] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          >
+            <Shield className="w-16 h-16 text-primary" />
+          </motion.div>
+
+          <div className="p-8 relative z-10">
+            {/* Profile Image Section */}
+            <div className="flex flex-col items-center mb-8">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="relative group"
               >
-                <option value="">Select</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-            </div>
-          ) : (
-            <p className="text-gray-400">{userData.gender}</p>
-          )}
+                {isEdit ? (
+                  <label htmlFor="image" className="cursor-pointer">
+                    <div className="relative">
+                      <motion.img
+                        whileHover={{ scale: 1.02 }}
+                        className="w-32 h-32 md:w-40 md:h-40 rounded-3xl object-cover shadow-xl border-4 border-white group-hover:opacity-80 transition-opacity duration-300"
+                        src={image ? URL.createObjectURL(image) : userData.image}
+                        alt="Profile"
+                      />
+                      <motion.div
+                        className="absolute inset-0 bg-black/50 rounded-3xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        whileHover={{ scale: 1.05 }}
+                      >
+                        <Camera className="w-8 h-8 text-white" />
+                      </motion.div>
+                    </div>
+                    <input
+                      onChange={(e) => setImage(e.target.files[0])}
+                      type="file"
+                      id="image"
+                      hidden
+                      accept="image/*"
+                    />
+                  </label>
+                ) : (
+                  <motion.img
+                    whileHover={{ scale: 1.02 }}
+                    className="w-32 h-32 md:w-40 md:h-40 rounded-3xl object-cover shadow-xl border-4 border-white"
+                    src={userData.image}
+                    alt="Profile"
+                  />
+                )}
+              </motion.div>
 
-          <p className="font-medium">Birthday:</p>
-          {isEdit ? (
-            <div className="flex items-center">
-              <img
-                src={assets.edit_icon}
-                alt="Edit"
-                className="bg-gray-50 w-4 md:w-[15px] mx-2"
-              />
-              <input
-                className="w-full bg-gray-100"
-                type="date"
-                value={userData.dob}
-                onChange={(e) =>
-                  setUserData((prev) => ({ ...prev, dob: e.target.value }))
-                }
-              />
+              {/* Name Section */}
+              {isEdit ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mt-6 w-full max-w-md"
+                >
+                  <div className="flex items-center gap-3 bg-neutral-50 rounded-2xl p-4 border border-neutral-200">
+                    <Edit3 className="w-5 h-5 text-primary" />
+                    <input
+                      className="bg-transparent text-xl md:text-2xl font-bold w-full focus:outline-none text-neutral-800"
+                      type="text"
+                      value={userData.name}
+                      onChange={(e) =>
+                        setUserData((prev) => ({ ...prev, name: e.target.value }))
+                      }
+                      placeholder="Enter your name"
+                    />
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.h2
+                  className="text-2xl md:text-3xl font-bold text-neutral-800 mt-6 text-center"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  {userData.name}
+                </motion.h2>
+              )}
             </div>
-          ) : (
-            <p className="text-gray-400">{userData.dob}</p>
-          )}
-        </div>
-      </div>
 
-      {/* Action Buttons */}
-      <div className="mt-10 flex flex-col sm:flex-row gap-2">
-        {isEdit && (
-          <button
-            className="border border-red-500 px-8 py-2 rounded-full hover:bg-red-400 hover:text-white transition-all"
-            onClick={cancelUpdateProfile}
-          >
-            Cancel
-          </button>
-        )}
-        {isEdit ? (
-          <button
-            className="border border-primary px-8 py-2 rounded-full focus:bg-primary focus:text-white transition-all"
-            onClick={updateUserProfileData}
-          >
-            {isloading ? <Loader color="#ffffff" /> : "Save Information"}
-          </button>
-        ) : (
-          <button
-            className="border border-primary px-8 py-2 rounded-full focus:bg-primary focus:text-white transition-all"
-            onClick={() => setIsEdit(true)}
-          >
-            Edit
-          </button>
-        )}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Contact Information */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="space-y-6"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <Mail className="w-6 h-6 text-primary" />
+                  <h3 className="text-xl font-bold text-neutral-800">Contact Information</h3>
+                </div>
+
+                {/* Email */}
+                <motion.div
+                  whileHover={{ x: 5 }}
+                  className="bg-neutral-50 rounded-2xl p-4 border border-neutral-200"
+                >
+                  <div className="flex items-center gap-3">
+                    <Mail className="w-5 h-5 text-primary" />
+                    <div>
+                      <p className="text-sm font-semibold text-neutral-600">Email Address</p>
+                      <p className="text-lg font-medium text-blue-600">{userData.email}</p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Phone */}
+                <motion.div
+                  whileHover={{ x: 5 }}
+                  className="bg-neutral-50 rounded-2xl p-4 border border-neutral-200"
+                >
+                  {isEdit ? (
+                    <div className="flex items-center gap-3">
+                      <Edit3 className="w-5 h-5 text-primary" />
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-neutral-600 mb-2">Phone Number</p>
+                        <input
+                          className="w-full bg-white rounded-xl p-3 border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-primary"
+                          type="text"
+                          value={userData.phone}
+                          onChange={(e) =>
+                            setUserData((prev) => ({ ...prev, phone: e.target.value }))
+                          }
+                          placeholder="Enter phone number"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3">
+                      <Phone className="w-5 h-5 text-secondary" />
+                      <div>
+                        <p className="text-sm font-semibold text-neutral-600">Phone Number</p>
+                        <p className="text-lg font-medium text-blue-600">{userData.phone}</p>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+
+                {/* Address */}
+                <motion.div
+                  whileHover={{ x: 5 }}
+                  className="bg-neutral-50 rounded-2xl p-4 border border-neutral-200"
+                >
+                  {isEdit ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <Edit3 className="w-5 h-5 text-primary" />
+                        <p className="text-sm font-semibold text-neutral-600">Address</p>
+                      </div>
+                      <input
+                        className="w-full bg-white rounded-xl p-3 border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-primary"
+                        type="text"
+                        value={userData.address.line1}
+                        onChange={(e) =>
+                          setUserData((prev) => ({
+                            ...prev,
+                            address: { ...prev.address, line1: e.target.value },
+                          }))
+                        }
+                        placeholder="Address line 1"
+                      />
+                      <input
+                        className="w-full bg-white rounded-xl p-3 border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-primary"
+                        type="text"
+                        value={userData.address.line2}
+                        onChange={(e) =>
+                          setUserData((prev) => ({
+                            ...prev,
+                            address: { ...prev.address, line2: e.target.value },
+                          }))
+                        }
+                        placeholder="Address line 2"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex items-start gap-3">
+                      <MapPin className="w-5 h-5 text-accent mt-1" />
+                      <div>
+                        <p className="text-sm font-semibold text-neutral-600">Address</p>
+                        <p className="text-lg font-medium text-neutral-700">
+                          {userData.address.line1}
+                          {userData.address.line2 && <><br />{userData.address.line2}</>}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              </motion.div>
+
+              {/* Basic Information */}
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="space-y-6"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <Award className="w-6 h-6 text-secondary" />
+                  <h3 className="text-xl font-bold text-neutral-800">Basic Information</h3>
+                </div>
+
+                {/* Gender */}
+                <motion.div
+                  whileHover={{ x: 5 }}
+                  className="bg-neutral-50 rounded-2xl p-4 border border-neutral-200"
+                >
+                  {isEdit ? (
+                    <div className="flex items-center gap-3">
+                      <Edit3 className="w-5 h-5 text-primary" />
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-neutral-600 mb-2">Gender</p>
+                        <select
+                          className="w-full bg-white rounded-xl p-3 border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-primary"
+                          value={userData.gender}
+                          onChange={(e) =>
+                            setUserData((prev) => ({ ...prev, gender: e.target.value }))
+                          }
+                        >
+                          <option value="">Select Gender</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3">
+                      <User className="w-5 h-5 text-primary" />
+                      <div>
+                        <p className="text-sm font-semibold text-neutral-600">Gender</p>
+                        <p className="text-lg font-medium text-neutral-700">{userData.gender || "Not specified"}</p>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+
+                {/* Date of Birth */}
+                <motion.div
+                  whileHover={{ x: 5 }}
+                  className="bg-neutral-50 rounded-2xl p-4 border border-neutral-200"
+                >
+                  {isEdit ? (
+                    <div className="flex items-center gap-3">
+                      <Edit3 className="w-5 h-5 text-primary" />
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-neutral-600 mb-2">Date of Birth</p>
+                        <input
+                          className="w-full bg-white rounded-xl p-3 border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-primary"
+                          type="date"
+                          value={userData.dob}
+                          onChange={(e) =>
+                            setUserData((prev) => ({ ...prev, dob: e.target.value }))
+                          }
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3">
+                      <Calendar className="w-5 h-5 text-secondary" />
+                      <div>
+                        <p className="text-sm font-semibold text-neutral-600">Date of Birth</p>
+                        <p className="text-lg font-medium text-neutral-700">{userData.dob || "Not specified"}</p>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+
+                {/* Member Since */}
+                <motion.div
+                  whileHover={{ x: 5 }}
+                  className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl p-4 border border-primary/20"
+                >
+                  <div className="flex items-center gap-3">
+                    <Award className="w-5 h-5 text-primary" />
+                    <div>
+                      <p className="text-sm font-semibold text-neutral-600">Member Since</p>
+                      <p className="text-lg font-medium text-primary">2024</p>
+                    </div>
+                  </div>
+                </motion.div>
+              </motion.div>
+            </div>
+
+            {/* Action Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="flex flex-col sm:flex-row gap-4 mt-12 justify-center"
+            >
+              {isEdit ? (
+                <>
+                  <motion.button
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={cancelUpdateProfile}
+                    className="flex items-center justify-center gap-3 bg-red-100 hover:bg-red-500 text-red-600 hover:text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-300 border border-red-200"
+                  >
+                    <X className="w-5 h-5" />
+                    Cancel
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ 
+                      scale: 1.02, 
+                      boxShadow: "0 10px 25px rgba(95, 111, 255, 0.3)",
+                      y: -2
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={updateUserProfileData}
+                    disabled={isloading}
+                    className="flex items-center justify-center gap-3 bg-gradient-to-r from-primary to-secondary text-white px-8 py-4 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 disabled:opacity-50"
+                  >
+                    {isloading ? (
+                      <Loader color="#ffffff" />
+                    ) : (
+                      <>
+                        <Save className="w-5 h-5" />
+                        Save Changes
+                      </>
+                    )}
+                  </motion.button>
+                </>
+              ) : (
+                <motion.button
+                  whileHover={{ 
+                    scale: 1.02, 
+                    boxShadow: "0 10px 25px rgba(95, 111, 255, 0.3)",
+                    y: -2
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setIsEdit(true)}
+                  className="flex items-center justify-center gap-3 bg-gradient-to-r from-primary to-secondary text-white px-8 py-4 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300"
+                >
+                  <Edit3 className="w-5 h-5" />
+                  Edit Profile
+                </motion.button>
+              )}
+            </motion.div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Star, MapPin, Clock, ArrowRight } from "lucide-react";
+import { Star, MapPin, Clock, ArrowRight, Heart, Award, Sparkles } from "lucide-react";
 
 import { AppContext } from "../context/AppContext";
 
@@ -32,20 +32,55 @@ const TopDoctors = () => {
   };
 
   return (
-    <div className="py-16 px-4 md:px-8">
+    <div className="py-20 px-4 md:px-8 relative overflow-hidden">
+      {/* Background Decoration */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <motion.div
+          animate={{ 
+            scale: [1, 1.3, 1],
+            rotate: [0, 180, 360],
+            x: [0, 60, 0]
+          }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{ 
+            scale: [1.2, 1, 1.2],
+            rotate: [360, 180, 0],
+            y: [0, -40, 0]
+          }}
+          transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-accent/5 to-primary/5 rounded-full blur-3xl"
+        />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="text-center mb-12"
+        className="text-center mb-16"
       >
-        <h2 className="text-4xl md:text-5xl font-bold text-neutral-800 mb-4">
-          Top <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Doctors</span> to Book
-        </h2>
-        <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+        <motion.div
+          animate={{ rotate: [0, 5, -5, 0] }}
+          transition={{ duration: 4, repeat: Infinity }}
+          className="inline-flex items-center gap-3 mb-6"
+        >
+          <Award className="w-8 h-8 text-primary" />
+          <h2 className="text-4xl md:text-5xl font-bold text-neutral-800">
+            Top <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Doctors</span> to Book
+          </h2>
+          <Award className="w-8 h-8 text-secondary" />
+        </motion.div>
+        <motion.p 
+          className="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
           Simply browse through our extensive list of trusted doctors and schedule your appointment hassle-free.
-        </p>
+        </motion.p>
       </motion.div>
 
       <motion.div
@@ -53,77 +88,153 @@ const TopDoctors = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16"
       >
         {doctors.slice(0, 8).map((doctor, index) => (
           <motion.div
             key={doctor._id}
             variants={cardVariants}
-            whileHover={{ y: -8, scale: 1.02 }}
+            whileHover={{ y: -12, scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate(`/appointments/${doctor._id}`)}
-            className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden border border-neutral-100"
+            className="group bg-white/80 backdrop-blur-md rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden border border-neutral-100 relative"
           >
+            {/* Animated background on hover */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              initial={false}
+            />
+
             <div className="relative overflow-hidden">
-              <img
+              <motion.img
                 src={doctor.image}
                 alt={doctor.name}
-                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-700"
+                whileHover={{ scale: 1.1 }}
               />
-              <div className="absolute top-4 right-4">
-                <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
+              
+              {/* Availability badge */}
+              <motion.div 
+                className="absolute top-4 right-4"
+                whileHover={{ scale: 1.1 }}
+              >
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold backdrop-blur-md border ${
                   doctor.available 
-                    ? "bg-green-100 text-green-700" 
-                    : "bg-red-100 text-red-700"
+                    ? "bg-green-100/80 text-green-700 border-green-200" 
+                    : "bg-red-100/80 text-red-700 border-red-200"
                 }`}>
-                  <div className={`w-2 h-2 rounded-full ${
-                    doctor.available ? "bg-green-500" : "bg-red-500"
-                  }`}></div>
+                  <motion.div 
+                    className={`w-3 h-3 rounded-full ${
+                      doctor.available ? "bg-green-500" : "bg-red-500"
+                    }`}
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
                   {doctor.available ? "Available" : "Busy"}
                 </div>
-              </div>
+              </motion.div>
+
+              {/* Floating heart icon */}
+              <motion.div
+                className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                animate={{ y: [0, -5, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <div className="w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg">
+                  <Heart className="w-5 h-5 text-red-500" />
+                </div>
+              </motion.div>
             </div>
 
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-3">
+            <div className="p-6 relative z-10">
+              <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-800 group-hover:text-primary transition-colors">
+                  <motion.h3 
+                    className="text-xl font-bold text-neutral-800 group-hover:text-primary transition-colors duration-300"
+                    whileHover={{ scale: 1.02 }}
+                  >
                     {doctor.name}
-                  </h3>
-                  <p className="text-primary font-semibold">{doctor.speciality}</p>
+                  </motion.h3>
+                  <motion.p 
+                    className="text-primary font-semibold text-lg"
+                    animate={{ opacity: [0.7, 1, 0.7] }}
+                    transition={{ duration: 3, repeat: Infinity, delay: index * 0.2 }}
+                  >
+                    {doctor.speciality}
+                  </motion.p>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  <span className="text-sm font-semibold text-neutral-600">4.8</span>
-                </div>
+                <motion.div 
+                  className="flex items-center gap-1"
+                  whileHover={{ scale: 1.1 }}
+                >
+                  <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                  <span className="text-sm font-bold text-neutral-600">4.8</span>
+                </motion.div>
               </div>
 
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2 text-sm text-neutral-600">
-                  <MapPin className="w-4 h-4" />
+              <div className="space-y-3 mb-6">
+                <motion.div 
+                  className="flex items-center gap-3 text-sm text-neutral-600"
+                  whileHover={{ x: 5 }}
+                >
+                  <MapPin className="w-4 h-4 text-primary" />
                   <span>{doctor.address.line1}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-neutral-600">
-                  <Clock className="w-4 h-4" />
+                </motion.div>
+                <motion.div 
+                  className="flex items-center gap-3 text-sm text-neutral-600"
+                  whileHover={{ x: 5 }}
+                >
+                  <Clock className="w-4 h-4 text-secondary" />
                   <span>{doctor.experience} Experience</span>
-                </div>
+                </motion.div>
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-2xl font-bold text-neutral-800">₹{doctor.fees}</span>
+                  <motion.span 
+                    className="text-3xl font-bold text-neutral-800"
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
+                  >
+                    ₹{doctor.fees}
+                  </motion.span>
                   <span className="text-sm text-neutral-500 ml-1">/ session</span>
                 </div>
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ 
+                    scale: 1.08, 
+                    boxShadow: "0 10px 25px rgba(95, 111, 255, 0.3)" 
+                  }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-xl font-semibold text-sm hover:bg-secondary transition-colors"
+                  className="flex items-center gap-2 bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-2xl font-bold text-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group"
                 >
-                  Book Now
-                  <ArrowRight className="w-4 h-4" />
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    animate={{ x: ["-100%", "100%"] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                  />
+                  <span className="relative z-10">Book Now</span>
+                  <motion.div
+                    animate={{ x: [0, 3, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    <ArrowRight className="w-4 h-4 relative z-10" />
+                  </motion.div>
                 </motion.button>
               </div>
             </div>
+
+            {/* Decorative elements */}
+            <motion.div
+              className="absolute bottom-2 right-2 w-2 h-2 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              animate={{ scale: [1, 1.5, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+            <motion.div
+              className="absolute top-1/2 left-2 w-1.5 h-1.5 bg-secondary rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              animate={{ scale: [1, 1.3, 1] }}
+              transition={{ duration: 2.5, repeat: Infinity }}
+            />
           </motion.div>
         ))}
       </motion.div>
@@ -136,16 +247,31 @@ const TopDoctors = () => {
         className="text-center"
       >
         <motion.button
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ 
+            scale: 1.05,
+            boxShadow: "0 20px 40px rgba(95, 111, 255, 0.3)",
+            y: -3
+          }}
           whileTap={{ scale: 0.95 }}
           onClick={() => {
             navigate("/doctors");
             scrollTo(0, 0);
           }}
-          className="inline-flex items-center gap-3 bg-gradient-to-r from-primary to-secondary text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+          className="group inline-flex items-center gap-4 bg-gradient-to-r from-primary via-secondary to-accent text-white px-10 py-5 rounded-3xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden"
         >
-          View All Doctors
-          <ArrowRight className="w-5 h-5" />
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            animate={{ x: ["-100%", "100%"] }}
+            transition={{ duration: 2, repeat: Infinity, repeatDelay: 4 }}
+          />
+          <Sparkles className="w-6 h-6 relative z-10" />
+          <span className="relative z-10">View All Doctors</span>
+          <motion.div
+            animate={{ x: [0, 5, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <ArrowRight className="w-6 h-6 relative z-10" />
+          </motion.div>
         </motion.button>
       </motion.div>
     </div>
