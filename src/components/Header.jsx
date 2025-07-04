@@ -22,7 +22,7 @@ const Header = () => {
             x: [0, 30, 0]
           }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-2xl"
+          className="absolute top-10 left-10 w-100 h-32 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-2xl"
         />
         <motion.div
           animate={{ 
