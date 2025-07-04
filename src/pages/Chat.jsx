@@ -240,7 +240,7 @@ function Chat({ handleClose }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.8, y: 100 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed bottom-12 right-8 w-full sm:w-[450px] max-h-[80vh] z-50"
+        className="fixed bottom-14 right-8 w-full sm:w-[450px] max-h-[80vh] z-50"
       >
         <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-neutral-200 relative">
           {/* Animated Background Elements */}
