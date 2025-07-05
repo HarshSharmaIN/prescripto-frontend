@@ -248,42 +248,6 @@ export const MeetingRoomUI = ({ appointmentId }) => {
                   />
                 </div>
               </div>
-
-              {/* Additional Quick Actions */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="flex items-center justify-center gap-4 mt-6"
-              >
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl border border-white/20 transition-all duration-300"
-                >
-                  <Monitor className="w-4 h-4" />
-                  <span className="hidden sm:inline">Share Screen</span>
-                </motion.button>
-
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl border border-white/20 transition-all duration-300"
-                >
-                  <Settings className="w-4 h-4" />
-                  <span className="hidden sm:inline">Settings</span>
-                </motion.button>
-
-                <motion.button
-                  whileHover={{ scale: 1.05, backgroundColor: "rgba(239, 68, 68, 0.2)" }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate(`/my-appointments/${appointmentId}`)}
-                  className="flex items-center gap-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 px-6 py-2 rounded-xl border border-red-500/30 transition-all duration-300 font-semibold"
-                >
-                  <PhoneOff className="w-4 h-4" />
-                  End Call
-                </motion.button>
-              </motion.div>
             </div>
           </motion.div>
         </div>
