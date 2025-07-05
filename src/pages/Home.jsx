@@ -37,7 +37,7 @@ const Home = () => {
         <Banner />
       </div>
 
-      {/* Enhanced Floating Chat Button */}
+      {/* Enhanced Floating Chat Button - Fixed Position */}
       <motion.button
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}
@@ -50,6 +50,7 @@ const Home = () => {
         whileTap={{ scale: 0.9 }}
         onClick={handleOpenChat}
         className="fixed bottom-8 right-8 z-50 bg-gradient-to-r from-primary via-secondary to-accent text-white p-4 rounded-full shadow-2xl hover:shadow-primary/25 transition-all duration-300 relative overflow-hidden group"
+        style={{ position: 'fixed', bottom: '2rem', right: '2rem' }}
       >
         {/* Animated background */}
         <motion.div
