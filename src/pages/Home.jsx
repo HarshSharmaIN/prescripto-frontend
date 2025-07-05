@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, X } from 'lucide-react'
+import { MessageCircle, X, Sparkles, Bot } from 'lucide-react'
 
 import Header from '../components/Header'
 import Speciality from '../components/Speciality'
@@ -49,7 +49,7 @@ const Home = () => {
         }}
         whileTap={{ scale: 0.9 }}
         onClick={handleOpenChat}
-        className="fixed bottom-8 right-8 z-40 bg-gradient-to-r from-primary via-secondary to-accent text-white p-4 rounded-full shadow-2xl hover:shadow-primary/25 transition-all duration-300 relative overflow-hidden group"
+        className="fixed bottom-8 right-8 z-50 bg-gradient-to-r from-primary via-secondary to-accent text-white p-4 rounded-full shadow-2xl hover:shadow-primary/25 transition-all duration-300 relative overflow-hidden group"
       >
         {/* Animated background */}
         <motion.div
@@ -59,8 +59,13 @@ const Home = () => {
         />
         
         {/* Button content */}
-        <div className="relative z-10">
-          <MessageCircle className="w-6 h-6" />
+        <div className="relative z-10 flex items-center justify-center">
+          <motion.div
+            animate={{ rotate: [0, 10, -10, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Bot className="w-6 h-6" />
+          </motion.div>
         </div>
         
         {/* Pulse effect */}
@@ -69,6 +74,19 @@ const Home = () => {
           transition={{ duration: 2, repeat: Infinity }}
           className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full"
         />
+
+        {/* Tooltip */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, x: 10 }}
+          whileHover={{ opacity: 1, scale: 1, x: 0 }}
+          className="absolute right-full mr-4 top-1/2 transform -translate-y-1/2 bg-black/80 backdrop-blur-md text-white px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap border border-white/20"
+        >
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4" />
+            Chat with AI Assistant
+          </div>
+          <div className="absolute left-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-l-8 border-l-black/80 border-t-4 border-t-transparent border-b-4 border-b-transparent"></div>
+        </motion.div>
       </motion.button>
 
       {/* Chat Window */}
