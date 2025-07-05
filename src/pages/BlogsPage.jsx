@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { AppContext } from "../context/AppContext";
+import Pagination from "../components/Pagination";
 import axios from "axios";
 
 const DoctorBlogs = () => {
@@ -11,6 +12,8 @@ const DoctorBlogs = () => {
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedAuthor, setSelectedAuthor] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(6); // Show 6 blogs per page
   const { backendUrl } = useContext(AppContext);
 
   const fetchBlogs = async () => {
@@ -44,9 +47,21 @@ const DoctorBlogs = () => {
     }
     
     setFilteredBlogs(filtered);
+    setCurrentPage(1); // Reset to first page when filters change
   }, [searchTerm, selectedAuthor, blogsData]);
 
   const authors = [...new Set(blogsData.map(blog => blog.author))];
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredBlogs.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentBlogs = filteredBlogs.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -130,9 +145,20 @@ const DoctorBlogs = () => {
           transition={{ delay: 0.3 }}
           className="mb-8"
         >
-          <p className="text-neutral-600">
-            Showing {filteredBlogs.length} of {blogsData.length} articles
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <p className="text-neutral-600">
+              Showing <span className="font-semibold text-neutral-800">{filteredBlogs.length}</span> of{' '}
+              <span className="font-semibold text-neutral-800">{blogsData.length}</span> articles
+              {selectedAuthor && (
+                <span> by <span className="font-semibold text-primary">{selectedAuthor}</span></span>
+              )}
+            </p>
+            {totalPages > 1 && (
+              <p className="text-sm text-neutral-500">
+                Page {currentPage} of {totalPages}
+              </p>
+            )}
+          </div>
         </motion.div>
 
         {/* Blogs Grid */}
@@ -147,62 +173,76 @@ const DoctorBlogs = () => {
             <p className="text-neutral-500">Try adjusting your search criteria</p>
           </motion.div>
         ) : (
-          <motion.div
-            variants={containerVariants}
-            animate="visible"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {filteredBlogs.map((blog, index) => (
-              <motion.div
-                key={blog._id}
-                variants={cardVariants}
-                whileHover={{ y: -8, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => navigate(`/blog/${blog._id}`)}
-                className="group bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden border border-neutral-100"
-              >
-                {blog.coverImg && (
-                  <div className="relative overflow-hidden h-48">
-                    <img 
-                      src={blog.coverImg} 
-                      alt={blog.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                  </div>
-                )}
-                
-                <div className="p-6">
-                  <div className="flex items-center gap-4 text-sm text-neutral-500 mb-3">
-                    <div className="flex items-center gap-1">
-                      <User className="w-4 h-4" />
-                      <span className="font-medium">{blog.author}</span>
+          <>
+            <motion.div
+              key={currentPage} // Re-animate when page changes
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
+            >
+              {currentBlogs.map((blog, index) => (
+                <motion.div
+                  key={blog._id}
+                  variants={cardVariants}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => navigate(`/blog/${blog._id}`)}
+                  className="group bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden border border-neutral-100"
+                >
+                  {blog.coverImg && (
+                    <div className="relative overflow-hidden h-48">
+                      <img 
+                        src={blog.coverImg} 
+                        alt={blog.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
-                      <span>{blog.date}</span>
+                  )}
+                  
+                  <div className="p-6">
+                    <div className="flex items-center gap-4 text-sm text-neutral-500 mb-3">
+                      <div className="flex items-center gap-1">
+                        <User className="w-4 h-4" />
+                        <span className="font-medium">{blog.author}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        <span>{blog.date}</span>
+                      </div>
                     </div>
+                    
+                    <h3 className="text-xl font-bold text-neutral-800 mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                      {blog.title}
+                    </h3>
+                    
+                    <p className="text-neutral-600 leading-relaxed mb-4 line-clamp-3">
+                      {blog.summary.substring(0, 120)}...
+                    </p>
+                    
+                    <motion.button
+                      whileHover={{ x: 5 }}
+                      className="inline-flex items-center gap-2 text-primary font-semibold hover:text-secondary transition-colors"
+                    >
+                      <span>Read More</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </motion.button>
                   </div>
-                  
-                  <h3 className="text-xl font-bold text-neutral-800 mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                    {blog.title}
-                  </h3>
-                  
-                  <p className="text-neutral-600 leading-relaxed mb-4 line-clamp-3">
-                    {blog.summary.substring(0, 120)}...
-                  </p>
-                  
-                  <motion.button
-                    whileHover={{ x: 5 }}
-                    className="inline-flex items-center gap-2 text-primary font-semibold hover:text-secondary transition-colors"
-                  >
-                    <span>Read More</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Pagination */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              itemsPerPage={itemsPerPage}
+              totalItems={filteredBlogs.length}
+              className="mt-12"
+            />
+          </>
         )}
       </div>
     </div>

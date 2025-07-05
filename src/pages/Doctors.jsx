@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Filter, Star, MapPin, Clock, ArrowRight, Search } from "lucide-react";
 
 import { AppContext } from "../context/AppContext";
+import Pagination from "../components/Pagination";
 
 const Doctors = () => {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ const Doctors = () => {
   const [filterDoc, setFilterDoc] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(9); // Show 9 doctors per page
 
   const specialities = [
     "General physician",
@@ -38,11 +41,23 @@ const Doctors = () => {
     }
     
     setFilterDoc(filtered);
+    setCurrentPage(1); // Reset to first page when filters change
   };
 
   useEffect(() => {
     applyFilter();
   }, [doctors, speciality, searchTerm]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filterDoc.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentDoctors = filterDoc.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -183,83 +198,117 @@ const Doctors = () => {
               <p className="text-neutral-500">Try adjusting your search or filter criteria</p>
             </motion.div>
           ) : (
-            <motion.div
-              variants={containerVariants}
-              animate="visible"
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-            >
-              {filterDoc.map((doctor, index) => (
-                <motion.div
-                  key={doctor._id}
-                  variants={cardVariants}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => navigate(`/appointments/${doctor._id}`)}
-                  className="group bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden border border-neutral-100"
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={doctor.image}
-                      alt={doctor.name}
-                      className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute top-4 right-4">
-                      <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${
-                        doctor.available 
-                          ? "bg-green-100/80 text-green-700" 
-                          : "bg-red-100/80 text-red-700"
-                      }`}>
-                        <div className={`w-2 h-2 rounded-full ${
-                          doctor.available ? "bg-green-500" : "bg-red-500"
-                        }`}></div>
-                        {doctor.available ? "Available" : "Busy"}
-                      </div>
-                    </div>
-                  </div>
+            <>
+              {/* Results Summary */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-8"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <p className="text-neutral-600">
+                    Found <span className="font-semibold text-neutral-800">{filterDoc.length}</span> doctors
+                    {speciality && (
+                      <span> in <span className="font-semibold text-primary">{speciality}</span></span>
+                    )}
+                  </p>
+                  <p className="text-sm text-neutral-500">
+                    Page {currentPage} of {totalPages}
+                  </p>
+                </div>
+              </motion.div>
 
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h3 className="text-xl font-bold text-neutral-800 group-hover:text-primary transition-colors">
-                          {doctor.name}
-                        </h3>
-                        <p className="text-primary font-semibold">{doctor.speciality}</p>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        <span className="text-sm font-semibold text-neutral-600">4.8</span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center gap-2 text-sm text-neutral-600">
-                        <MapPin className="w-4 h-4" />
-                        <span>{doctor.address.line1}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-neutral-600">
-                        <Clock className="w-4 h-4" />
-                        <span>{doctor.experience} Experience</span>
+              {/* Doctors Grid */}
+              <motion.div
+                key={currentPage} // Re-animate when page changes
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
+              >
+                {currentDoctors.map((doctor, index) => (
+                  <motion.div
+                    key={doctor._id}
+                    variants={cardVariants}
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => navigate(`/appointments/${doctor._id}`)}
+                    className="group bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden border border-neutral-100"
+                  >
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={doctor.image}
+                        alt={doctor.name}
+                        className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute top-4 right-4">
+                        <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${
+                          doctor.available 
+                            ? "bg-green-100/80 text-green-700" 
+                            : "bg-red-100/80 text-red-700"
+                        }`}>
+                          <div className={`w-2 h-2 rounded-full ${
+                            doctor.available ? "bg-green-500" : "bg-red-500"
+                          }`}></div>
+                          {doctor.available ? "Available" : "Busy"}
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-2xl font-bold text-neutral-800">₹{doctor.fees}</span>
-                        <span className="text-sm text-neutral-500 ml-1">/ session</span>
+                    <div className="p-6">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="text-xl font-bold text-neutral-800 group-hover:text-primary transition-colors">
+                            {doctor.name}
+                          </h3>
+                          <p className="text-primary font-semibold">{doctor.speciality}</p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <span className="text-sm font-semibold text-neutral-600">4.8</span>
+                        </div>
                       </div>
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="flex items-center gap-2 bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-xl font-semibold text-sm hover:shadow-lg transition-all"
-                      >
-                        Book Now
-                        <ArrowRight className="w-4 h-4" />
-                      </motion.button>
+
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center gap-2 text-sm text-neutral-600">
+                          <MapPin className="w-4 h-4" />
+                          <span>{doctor.address.line1}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-neutral-600">
+                          <Clock className="w-4 h-4" />
+                          <span>{doctor.experience} Experience</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-2xl font-bold text-neutral-800">₹{doctor.fees}</span>
+                          <span className="text-sm text-neutral-500 ml-1">/ session</span>
+                        </div>
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="flex items-center gap-2 bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-xl font-semibold text-sm hover:shadow-lg transition-all"
+                        >
+                          Book Now
+                          <ArrowRight className="w-4 h-4" />
+                        </motion.button>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* Pagination */}
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                itemsPerPage={itemsPerPage}
+                totalItems={filterDoc.length}
+                className="mt-12"
+              />
+            </>
           )}
         </div>
       </div>
