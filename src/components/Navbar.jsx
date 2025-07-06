@@ -174,15 +174,14 @@ const Navbar = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 lg:hidden"
           >
-            <div className="absolute inset-0 bg-black/50" onClick={() => setShowMenu(false)} />
+            {/* <div className="absolute inset-0 bg-black/50" onClick={() => setShowMenu(false)} /> */}
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 h-full w-72 sm:w-80 bg-white/95 shadow-xl"
             >
-              <div className="flex items-center justify-between p-4 sm:p-6 border-b border-neutral-200">
+              <div className="flex items-center justify-between p-4 sm:p-6 border-b border-neutral-200 bg-white">
                 <img className="w-28 sm:w-32" src={assets.logo} alt="Logo" />
                 <motion.button
                   whileHover={{ scale: 1.1 }}
@@ -194,7 +193,7 @@ const Navbar = () => {
                 </motion.button>
               </div>
 
-              <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+              <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 bg-white h-full">
                 {token && userData ? (
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3 p-3 sm:p-4 bg-neutral-50 rounded-xl">
