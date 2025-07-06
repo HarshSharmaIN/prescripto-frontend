@@ -85,7 +85,7 @@ const App = () => {
           },
         }}
       />
-      <div className="mx-4 sm:mx-[10%]">
+      <div className="mx-2 sm:mx-4 lg:mx-[5%] xl:mx-[10%]">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -114,11 +114,11 @@ const App = () => {
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ delay: 1, type: "spring", stiffness: 200 }}
-          className="fixed bottom-8 right-8 z-[9999]"
+          className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-[9999]"
           style={{ 
             position: 'fixed', 
-            bottom: '2rem', 
-            right: '2rem', 
+            bottom: '1rem', 
+            right: '1rem', 
             zIndex: 9999 
           }}
         >
@@ -130,7 +130,7 @@ const App = () => {
             }}
             whileTap={{ scale: 0.9 }}
             onClick={handleOpenChat}
-            className="bg-gradient-to-r from-primary via-secondary to-accent text-white p-4 rounded-full shadow-2xl hover:shadow-primary/25 transition-all duration-300 relative overflow-hidden group"
+            className="bg-gradient-to-r from-primary via-secondary to-accent text-white p-3 sm:p-4 rounded-full shadow-2xl hover:shadow-primary/25 transition-all duration-300 relative overflow-hidden group"
           >
             {/* Animated background */}
             <motion.div
@@ -145,7 +145,7 @@ const App = () => {
                 animate={{ rotate: [0, 10, -10, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               >
-                <Bot className="w-6 h-6" />
+                <Bot className="w-5 h-5 sm:w-6 sm:h-6" />
               </motion.div>
             </div>
             
@@ -156,11 +156,11 @@ const App = () => {
               className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full"
             />
 
-            {/* Tooltip */}
+            {/* Tooltip - Hidden on mobile */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, x: 10 }}
               whileHover={{ opacity: 1, scale: 1, x: 0 }}
-              className="absolute right-full mr-4 top-1/2 transform -translate-y-1/2 bg-black/80 backdrop-blur-md text-white px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap border border-white/20 pointer-events-none"
+              className="hidden sm:block absolute right-full mr-4 top-1/2 transform -translate-y-1/2 bg-black/80 backdrop-blur-md text-white px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap border border-white/20 pointer-events-none"
             >
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4" />
