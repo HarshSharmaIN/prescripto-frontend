@@ -240,9 +240,9 @@ function Chat({ handleClose }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.8, y: 100 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed bottom-14 right-8 w-full sm:w-[450px] max-h-[80vh] z-50"
+        className="fixed bottom-4 right-4 w-[calc(100vw-2rem)] sm:w-[400px] md:w-[450px] max-h-[80vh] z-50"
       >
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-neutral-200 relative">
+        <div className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-neutral-200 relative">
           {/* Animated Background Elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <motion.div
@@ -252,7 +252,7 @@ function Chat({ handleClose }) {
                 x: [0, 30, 0]
               }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="absolute top-10 right-10 w-32 h-32 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-full blur-2xl"
+              className="absolute top-10 right-10 w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-full blur-2xl"
             />
             <motion.div
               animate={{ 
@@ -261,12 +261,12 @@ function Chat({ handleClose }) {
                 y: [0, -20, 0]
               }}
               transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-              className="absolute bottom-10 left-10 w-24 h-24 bg-gradient-to-r from-accent/5 to-primary/5 rounded-full blur-xl"
+              className="absolute bottom-10 left-10 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-r from-accent/5 to-primary/5 rounded-full blur-xl"
             />
           </div>
 
           {/* Enhanced Header */}
-          <div className="relative bg-gradient-to-r from-primary via-secondary to-accent p-6 overflow-hidden">
+          <div className="relative bg-gradient-to-r from-primary via-secondary to-accent p-4 sm:p-6 overflow-hidden">
             {/* Animated Background Elements */}
             <div className="absolute inset-0 opacity-20">
               <motion.div
@@ -275,7 +275,7 @@ function Chat({ handleClose }) {
                   rotate: [0, 180, 360]
                 }}
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute top-2 left-4 w-16 h-16 bg-white rounded-full"
+                className="absolute top-2 left-4 w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-full"
               />
               <motion.div
                 animate={{ 
@@ -283,39 +283,39 @@ function Chat({ handleClose }) {
                   rotate: [360, 180, 0]
                 }}
                 transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                className="absolute bottom-2 right-6 w-12 h-12 bg-white rounded-full"
+                className="absolute bottom-2 right-6 w-8 h-8 sm:w-12 sm:h-12 bg-white rounded-full"
               />
             </div>
 
             <div className="relative z-10 flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <motion.div
                   animate={{ rotate: [0, 10, -10, 0] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm"
+                  className="w-8 h-8 sm:w-12 sm:h-12 bg-white/20 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-sm"
                 >
-                  <Stethoscope className="w-7 h-7 text-white" />
+                  <Stethoscope className="w-4 h-4 sm:w-7 sm:h-7 text-white" />
                 </motion.div>
                 <div>
-                  <h1 className="text-white text-xl font-bold flex items-center gap-2">
+                  <h1 className="text-white text-sm sm:text-xl font-bold flex items-center gap-1 sm:gap-2">
                     Medical Assistant
                     <motion.div
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     >
-                      <Sparkles className="w-5 h-5" />
+                      <Sparkles className="w-3 h-3 sm:w-5 sm:h-5" />
                     </motion.div>
                   </h1>
-                  <p className="text-white/80 text-sm">AI-Powered Healthcare Support</p>
+                  <p className="text-white/80 text-xs sm:text-sm">AI-Powered Healthcare Support</p>
                 </div>
               </div>
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={handleClose}
-                className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center hover:bg-white/30 transition-colors backdrop-blur-sm"
+                className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg sm:rounded-xl flex items-center justify-center hover:bg-white/30 transition-colors backdrop-blur-sm"
               >
-                <X className="w-5 h-5 text-white" />
+                <X className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </motion.button>
             </div>
           </div>

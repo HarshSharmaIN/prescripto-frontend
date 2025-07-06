@@ -13,11 +13,19 @@
     --color-secondary: #4f46e5;
     --color-accent: #06b6d4;
   }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    overflow-x: hidden;
+  }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105;
+    @apply bg-gradient-to-r from-primary to-secondary text-white px-6 sm:px-8 py-2 sm:py-3 rounded-xl sm:rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 text-sm sm:text-base;
   }
   
   .gradient-bg {
@@ -36,6 +44,12 @@
 .my-grid {
   @apply grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+@media (max-width: 640px) {
+  .my-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
 }
 
 .active hr {
@@ -83,4 +97,75 @@
 
 .toast-loading {
   @apply bg-gradient-to-r from-blue-500 to-indigo-500 text-white;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 640px) {
+  .text-responsive {
+    @apply text-sm;
+  }
+  
+  .heading-responsive {
+    @apply text-2xl;
+  }
+  
+  .padding-responsive {
+    @apply px-4 py-3;
+  }
+  
+  .gap-responsive {
+    @apply gap-3;
+  }
+  
+  .rounded-responsive {
+    @apply rounded-xl;
+  }
+}
+
+/* Prevent horizontal scroll on mobile */
+@media (max-width: 768px) {
+  .container {
+    @apply max-w-full overflow-x-hidden;
+  }
+  
+  .grid-responsive {
+    @apply grid-cols-1;
+  }
+  
+  .flex-responsive {
+    @apply flex-col;
+  }
+}
+
+/* Line clamp utilities for text truncation */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Improved touch targets for mobile */
+@media (max-width: 768px) {
+  button, a, input, select, textarea {
+    @apply min-h-[44px];
+  }
+  
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
 }

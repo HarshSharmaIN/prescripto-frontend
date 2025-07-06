@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, User, Calendar, LogOut, Settings } from "lucide-react";
+import { Menu, X, User, Calendar, LogOut } from "lucide-react";
 
 import { assets } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
@@ -41,7 +41,7 @@ const Navbar = () => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-neutral-200 shadow-sm"
     >
-      <div className="flex items-center justify-between py-4 px-4 sm:px-6 lg:px-8">
+      <div className="flex items-center justify-between py-3 px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <motion.div
           whileHover={{ scale: 1.05 }}
@@ -49,11 +49,11 @@ const Navbar = () => {
           onClick={() => navigate("/")}
           className="cursor-pointer"
         >
-          <img className="w-44 h-auto" src={assets.logo} alt="Logo" />
+          <img className="w-32 sm:w-36 md:w-44 h-auto" src={assets.logo} alt="Logo" />
         </motion.div>
 
-        {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center space-x-8">
+        {/* Desktop Navigation - Hidden on mobile */}
+        <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
           {navItems.map((item, index) => (
             <motion.div
               key={item.path}
@@ -64,7 +64,7 @@ const Navbar = () => {
               <NavLink
                 to={item.path}
                 className={({ isActive }) =>
-                  `relative py-2 px-4 text-sm font-medium transition-all duration-300 ${
+                  `relative py-2 px-3 text-sm font-medium transition-all duration-300 ${
                     isActive
                       ? "text-primary"
                       : "text-neutral-700 hover:text-primary"
@@ -90,7 +90,7 @@ const Navbar = () => {
         </div>
 
         {/* User Actions */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 sm:space-x-4">
           {token && userData ? (
             <div className="relative">
               <motion.button
@@ -100,7 +100,7 @@ const Navbar = () => {
                 className="flex items-center space-x-2 p-2 rounded-xl hover:bg-neutral-100 transition-colors"
               >
                 <img
-                  className="w-10 h-10 rounded-full border-2 border-primary/20"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-primary/20"
                   src={userData.image}
                   alt="Profile"
                 />
@@ -122,7 +122,7 @@ const Navbar = () => {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-neutral-200 py-2 z-50"
+                    className="absolute right-0 mt-2 w-48 sm:w-56 bg-white rounded-xl shadow-lg border border-neutral-200 py-2 z-50"
                   >
                     {dropdownItems.map((item, index) => (
                       <motion.button
@@ -132,9 +132,9 @@ const Navbar = () => {
                           item.action();
                           setShowDropdown(false);
                         }}
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-left text-neutral-700 hover:text-primary transition-colors"
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-left text-neutral-700 hover:text-primary transition-colors text-sm"
                       >
-                        <item.icon className="w-5 h-5" />
+                        <item.icon className="w-4 h-4" />
                         <span className="font-medium">{item.label}</span>
                       </motion.button>
                     ))}
@@ -147,7 +147,7 @@ const Navbar = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/login")}
-              className="hidden lg:block btn-primary"
+              className="hidden sm:block bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-sm hover:shadow-lg transition-all duration-300"
             >
               Create Account
             </motion.button>
@@ -160,7 +160,7 @@ const Navbar = () => {
             onClick={() => setShowMenu(true)}
             className="lg:hidden p-2 rounded-xl hover:bg-neutral-100 transition-colors"
           >
-            <Menu className="w-6 h-6 text-neutral-700" />
+            <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-neutral-700" />
           </motion.button>
         </div>
       </div>
@@ -180,32 +180,32 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl"
+              className="absolute right-0 top-0 h-full w-72 sm:w-80 bg-white shadow-xl"
             >
-              <div className="flex items-center justify-between p-6 border-b border-neutral-200">
-                <img className="w-32" src={assets.logo} alt="Logo" />
+              <div className="flex items-center justify-between p-4 sm:p-6 border-b border-neutral-200">
+                <img className="w-28 sm:w-32" src={assets.logo} alt="Logo" />
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => setShowMenu(false)}
                   className="p-2 rounded-xl hover:bg-neutral-100 transition-colors"
                 >
-                  <X className="w-6 h-6 text-neutral-700" />
+                  <X className="w-5 h-5 sm:w-6 sm:h-6 text-neutral-700" />
                 </motion.button>
               </div>
 
-              <div className="p-6 space-y-6">
+              <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
                 {token && userData ? (
                   <div className="space-y-4">
-                    <div className="flex items-center space-x-3 p-4 bg-neutral-50 rounded-xl">
+                    <div className="flex items-center space-x-3 p-3 sm:p-4 bg-neutral-50 rounded-xl">
                       <img
-                        className="w-12 h-12 rounded-full border-2 border-primary/20"
+                        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-primary/20"
                         src={userData.image}
                         alt="Profile"
                       />
-                      <div>
-                        <p className="font-semibold text-neutral-800">{userData.name}</p>
-                        <p className="text-sm text-neutral-500">{userData.email}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-neutral-800 text-sm sm:text-base truncate">{userData.name}</p>
+                        <p className="text-xs sm:text-sm text-neutral-500 truncate">{userData.email}</p>
                       </div>
                     </div>
                     {dropdownItems.map((item, index) => (
@@ -218,8 +218,8 @@ const Navbar = () => {
                         }}
                         className="w-full flex items-center space-x-3 p-3 text-left text-neutral-700 hover:text-primary hover:bg-neutral-50 rounded-xl transition-colors"
                       >
-                        <item.icon className="w-5 h-5" />
-                        <span className="font-medium">{item.label}</span>
+                        <item.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span className="font-medium text-sm sm:text-base">{item.label}</span>
                       </motion.button>
                     ))}
                   </div>
@@ -231,7 +231,7 @@ const Navbar = () => {
                       navigate("/login");
                       setShowMenu(false);
                     }}
-                    className="w-full btn-primary"
+                    className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 sm:py-4 rounded-xl font-semibold text-sm sm:text-base hover:shadow-lg transition-all duration-300"
                   >
                     Create Account
                   </motion.button>
@@ -249,7 +249,7 @@ const Navbar = () => {
                         to={item.path}
                         onClick={() => setShowMenu(false)}
                         className={({ isActive }) =>
-                          `block p-3 rounded-xl font-medium transition-colors ${
+                          `block p-3 rounded-xl font-medium transition-colors text-sm sm:text-base ${
                             isActive
                               ? "bg-primary text-white"
                               : "text-neutral-700 hover:bg-neutral-100"
