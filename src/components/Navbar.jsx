@@ -174,13 +174,13 @@ const Navbar = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 lg:hidden"
           >
-            <div className="absolute inset-0 bg-white" onClick={() => setShowMenu(false)} />
+            <div className="absolute inset-0 bg-black/50" onClick={() => setShowMenu(false)} />
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 h-full w-72 sm:w-80 bg-white/95 backdrop-blur-md shadow-xl"
+              className="absolute right-0 top-0 h-full w-72 sm:w-80 bg-white backdrop-blur-md shadow-xl"
             >
               <div className="flex items-center justify-between p-4 sm:p-6 border-b border-neutral-200">
                 <img className="w-28 sm:w-32" src={assets.logo} alt="Logo" />
