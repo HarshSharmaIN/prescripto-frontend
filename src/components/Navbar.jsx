@@ -39,7 +39,7 @@ const Navbar = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-neutral-200 shadow-sm"
+      className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-neutral-200 shadow-sm"
     >
       <div className="flex items-center justify-between py-3 px-4 sm:px-6 lg:px-8">
         {/* Logo */}
@@ -122,7 +122,7 @@ const Navbar = () => {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-48 sm:w-56 bg-white rounded-xl shadow-lg border border-neutral-200 py-2 z-50"
+                    className="absolute right-0 mt-2 w-48 sm:w-56 bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-neutral-200 py-2 z-50"
                   >
                     {dropdownItems.map((item, index) => (
                       <motion.button
@@ -180,7 +180,7 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 h-full w-72 sm:w-80 bg-white shadow-xl"
+              className="absolute right-0 top-0 h-full w-72 sm:w-80 bg-white/95 backdrop-blur-md shadow-xl"
             >
               <div className="flex items-center justify-between p-4 sm:p-6 border-b border-neutral-200">
                 <img className="w-28 sm:w-32" src={assets.logo} alt="Logo" />

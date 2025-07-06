@@ -76,7 +76,7 @@ const Header = () => {
                 backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
               }}
               transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-              className="bg-gradient-to-r from-cyan-200 via-white to-cyan-200 bg-clip-text text-transparent bg-[length:200%_100%]"
+              className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent bg-[length:200%_100%]"
             >
               With Trusted Doctors
             </motion.span>
