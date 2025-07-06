@@ -74,7 +74,7 @@ const PhoneInputModal = ({ onClose }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4"
       >
         {/* Backdrop */}
         <motion.div
@@ -91,38 +91,38 @@ const PhoneInputModal = ({ onClose }) => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           transition={{ type: "spring", duration: 0.5 }}
-          className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden"
+          className="relative w-full max-w-sm sm:max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden"
         >
           {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-primary to-secondary p-6 text-white relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+          <div className="bg-gradient-to-r from-primary to-secondary p-4 sm:p-6 text-white relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-white/10 rounded-full blur-2xl"></div>
+            <div className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-white/10 rounded-full blur-xl"></div>
             
             <div className="relative z-10 flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                  <Phone className="w-6 h-6" />
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <div className="w-8 h-8 sm:w-12 sm:h-12 bg-white/20 rounded-lg sm:rounded-xl flex items-center justify-center">
+                  <Phone className="w-4 h-4 sm:w-6 sm:h-6" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold">Phone Verification</h3>
-                  <p className="text-white/80 text-sm">Secure login with OTP</p>
+                  <h3 className="text-lg sm:text-xl font-bold">Phone Verification</h3>
+                  <p className="text-white/80 text-xs sm:text-sm">Secure login with OTP</p>
                 </div>
               </div>
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={onClose}
-                className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+                className="w-6 h-6 sm:w-8 sm:h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-3 h-3 sm:w-5 sm:h-5" />
               </motion.button>
             </div>
           </div>
 
           {/* Content */}
-          <div className="p-6 space-y-6">
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* Features */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {features.map((feature, index) => (
                 <motion.div
                   key={feature.text}
@@ -131,8 +131,8 @@ const PhoneInputModal = ({ onClose }) => {
                   transition={{ delay: index * 0.1 }}
                   className="text-center"
                 >
-                  <div className="w-12 h-12 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-xl flex items-center justify-center mx-auto mb-2">
-                    <feature.icon className="w-6 h-6 text-primary" />
+                  <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-1 sm:mb-2">
+                    <feature.icon className="w-4 h-4 sm:w-6 sm:h-6 text-primary" />
                   </div>
                   <p className="text-xs font-medium text-neutral-600">{feature.text}</p>
                 </motion.div>
@@ -144,24 +144,24 @@ const PhoneInputModal = ({ onClose }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
               <label className="block text-sm font-semibold text-neutral-700">
                 Enter your mobile number
               </label>
               
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <img src={assets.flag} alt="India" className="w-6 h-4 mr-2" />
-                  <span className="text-neutral-600 font-medium">+91</span>
-                  <div className="w-px h-6 bg-neutral-300 mx-3"></div>
+                <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">
+                  <img src={assets.flag} alt="India" className="w-4 h-3 sm:w-6 sm:h-4 mr-1 sm:mr-2" />
+                  <span className="text-neutral-600 font-medium text-sm sm:text-base">+91</span>
+                  <div className="w-px h-4 sm:h-6 bg-neutral-300 mx-2 sm:mx-3"></div>
                 </div>
                 <input
                   type="tel"
                   value={phoneNumber}
                   onChange={handlePhoneNumberChange}
                   placeholder="Enter 10-digit number"
-                  className="w-full pl-20 pr-4 py-4 border border-neutral-200 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 text-lg font-medium"
+                  className="w-full pl-16 sm:pl-20 pr-3 sm:pr-4 py-3 sm:py-4 border border-neutral-200 rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 text-base sm:text-lg font-medium"
                   maxLength="10"
                 />
               </div>
@@ -170,10 +170,10 @@ const PhoneInputModal = ({ onClose }) => {
                 <motion.p
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="text-red-500 text-sm flex items-center gap-2"
+                  className="text-red-500 text-xs sm:text-sm flex items-center gap-2"
                 >
-                  <div className="w-4 h-4 bg-red-100 rounded-full flex items-center justify-center">
-                    <X className="w-3 h-3 text-red-500" />
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-100 rounded-full flex items-center justify-center">
+                    <X className="w-2 h-2 sm:w-3 sm:h-3 text-red-500" />
                   </div>
                   {error}
                 </motion.p>
@@ -183,9 +183,9 @@ const PhoneInputModal = ({ onClose }) => {
                 <motion.p
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="text-green-500 text-sm flex items-center gap-2"
+                  className="text-green-500 text-xs sm:text-sm flex items-center gap-2"
                 >
-                  <CheckCircle className="w-4 h-4" />
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" />
                   Valid phone number
                 </motion.p>
               )}
@@ -196,13 +196,13 @@ const PhoneInputModal = ({ onClose }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="flex gap-3"
+              className="flex flex-col sm:flex-row gap-2 sm:gap-3"
             >
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onClose}
-                className="flex-1 py-3 px-4 border border-neutral-200 text-neutral-600 rounded-xl font-semibold hover:bg-neutral-50 transition-colors"
+                className="flex-1 py-3 px-4 border border-neutral-200 text-neutral-600 rounded-lg sm:rounded-xl font-semibold hover:bg-neutral-50 transition-colors text-sm sm:text-base"
               >
                 Cancel
               </motion.button>
@@ -211,7 +211,7 @@ const PhoneInputModal = ({ onClose }) => {
                 whileTap={{ scale: 0.98 }}
                 onClick={handleGetOTPRequest}
                 disabled={phoneNumber.length !== 10 || loading}
-                className="flex-1 py-3 px-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden"
+                className="flex-1 py-3 px-4 bg-gradient-to-r from-primary to-secondary text-white rounded-lg sm:rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 relative overflow-hidden text-sm sm:text-base"
               >
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
@@ -230,12 +230,12 @@ const PhoneInputModal = ({ onClose }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-2xl border border-blue-100"
+              className="bg-gradient-to-r from-blue-50 to-cyan-50 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-blue-100"
             >
-              <div className="flex items-start gap-3">
-                <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+              <div className="flex items-start gap-2 sm:gap-3">
+                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-blue-900">Secure & Private</p>
+                  <p className="text-xs sm:text-sm font-medium text-blue-900">Secure & Private</p>
                   <p className="text-xs text-blue-700 mt-1">
                     Your phone number is encrypted and never shared with third parties.
                   </p>
