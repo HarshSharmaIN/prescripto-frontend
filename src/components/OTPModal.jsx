@@ -74,10 +74,9 @@ const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
   const handleResendCode = async () => {
     try {
       setResendLoading(true);
-      const cleanPhoneNumber = phoneNumber.replace('+91', '');
       
       const { data } = await axios.post(backendUrl + '/api/user/generate-otp', { 
-        phone: cleanPhoneNumber 
+        phone: phoneNumber 
       });
 
       if (data.success) {
@@ -100,10 +99,9 @@ const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
     try {
       setLoading(true);
       const enteredOTP = otp.join("");
-      const cleanPhoneNumber = phoneNumber.replace('+91', '');
 
       const { data } = await axios.post(backendUrl + "/api/user/phone-login", {
-        phone: cleanPhoneNumber,
+        phone: phoneNumber,
         otp: enteredOTP,
       });
 
