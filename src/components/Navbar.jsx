@@ -180,7 +180,7 @@ const Navbar = () => {
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
             >
-              <div className="flex items-center justify-between h-screen p-4 sm:p-6 border-b border-neutral-200 bg-white">
+              <div className="flex items-center justify-between max-h-screen p-4 sm:p-6 border-b border-neutral-200 bg-white">
                 <img className="w-28 sm:w-32" src={assets.logo} alt="Logo" />
                 <motion.button
                   whileHover={{ scale: 1.1 }}
