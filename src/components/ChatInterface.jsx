@@ -55,7 +55,7 @@ function ChatInterface({
       {/* Input Area */}
       <div className="border-t border-neutral-200 bg-white/80 backdrop-blur-sm">
         <form onSubmit={handleSubmit} className="p-3 sm:p-4">
-          <div className="flex flex-col gap-2 sm:gap-3">
+          <div className="flex gap-2 sm:gap-3">
             <div className="flex-1 relative">
               <input
                 type="text"
