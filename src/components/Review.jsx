@@ -17,7 +17,7 @@ const Review = ({ review }) => {
         whileHover={{ scale: 1.2, rotate: 360 }}
         transition={{ duration: 0.3 }}
       >
-        <Star 
+        <Star
           className={`w-5 h-5 ${
             i < stars ? "text-yellow-500 fill-yellow-500" : "text-neutral-300"
           }`}
@@ -27,7 +27,7 @@ const Review = ({ review }) => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -59,13 +59,13 @@ const Review = ({ review }) => {
               <User className="w-7 h-7 text-primary" />
             </motion.div>
             <div>
-              <motion.h4 
+              <motion.h4
                 className="text-xl font-bold text-neutral-900 group-hover:text-primary transition-colors duration-300"
                 whileHover={{ scale: 1.02 }}
               >
                 {userName}
               </motion.h4>
-              <motion.div 
+              <motion.div
                 className="flex items-center gap-2 text-sm text-neutral-500"
                 whileHover={{ scale: 1.05 }}
               >
@@ -74,8 +74,8 @@ const Review = ({ review }) => {
               </motion.div>
             </div>
           </div>
-          
-          <motion.div 
+
+          <motion.div
             className="flex items-center gap-1"
             whileHover={{ scale: 1.1 }}
           >
@@ -83,7 +83,7 @@ const Review = ({ review }) => {
           </motion.div>
         </div>
 
-        <motion.p 
+        <motion.p
           className="text-neutral-700 leading-relaxed text-lg mb-6 relative"
           initial={{ opacity: 0.8 }}
           whileHover={{ opacity: 1 }}
@@ -93,21 +93,12 @@ const Review = ({ review }) => {
 
         {/* Action buttons */}
         <div className="flex items-center gap-4">
-          <motion.button
-            whileHover={{ scale: 1.05, x: 3 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 text-sm text-neutral-500 hover:text-primary transition-colors duration-300"
-          >
-            <ThumbsUp className="w-4 h-4" />
-            <span>Helpful</span>
-          </motion.button>
-          
           <motion.div
             className="w-1 h-1 bg-neutral-300 rounded-full"
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           />
-          
+
           <motion.span
             className="text-sm text-neutral-500"
             animate={{ opacity: [0.7, 1, 0.7] }}

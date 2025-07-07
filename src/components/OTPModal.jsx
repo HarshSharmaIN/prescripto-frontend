@@ -1,6 +1,14 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Shield, Clock, CheckCircle, Sparkles, Phone, RotateCcw } from "lucide-react";
+import {
+  X,
+  Shield,
+  Clock,
+  CheckCircle,
+  Sparkles,
+  Phone,
+  RotateCcw,
+} from "lucide-react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
@@ -74,22 +82,22 @@ const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
   const handleResendCode = async () => {
     try {
       setResendLoading(true);
-      
-      const { data } = await axios.post(backendUrl + '/api/user/generate-otp', { 
-        phone: phoneNumber 
+
+      const { data } = await axios.post(backendUrl + "/api/user/generate-otp", {
+        phone: phoneNumber,
       });
 
       if (data.success) {
-        toast.success('OTP resent successfully!');
+        toast.success("OTP resent successfully!");
         setResendCooldown(30); // 30 second cooldown
-        setError('');
+        setError("");
         handleClearOTP();
       } else {
         toast.error(data.message);
       }
     } catch (error) {
       console.log(error.message);
-      toast.error('Failed to resend OTP. Please try again.');
+      toast.error("Failed to resend OTP. Please try again.");
     } finally {
       setResendLoading(false);
     }
@@ -107,12 +115,13 @@ const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
 
       if (data.success) {
         if (data.existing) {
+          localStorage.setItem("token", data.token);
           setToken(data.token);
           onClose();
         } else {
           setIsDetailsModalOpen(true);
         }
-        
+
         toast.success(data.message);
       } else {
         setError("Invalid OTP");
@@ -152,19 +161,19 @@ const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
           {/* Animated Background Elements */}
           <div className="absolute inset-0 overflow-hidden">
             <motion.div
-              animate={{ 
+              animate={{
                 scale: [1, 1.2, 1],
                 rotate: [0, 180, 360],
-                x: [0, 30, 0]
+                x: [0, 30, 0],
               }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               className="absolute top-10 right-10 w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full blur-2xl"
             />
             <motion.div
-              animate={{ 
+              animate={{
                 scale: [1.1, 1, 1.1],
                 rotate: [360, 180, 0],
-                y: [0, -20, 0]
+                y: [0, -20, 0],
               }}
               transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
               className="absolute bottom-10 left-10 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-r from-accent/10 to-primary/10 rounded-full blur-xl"
@@ -175,7 +184,7 @@ const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
           <div className="relative bg-gradient-to-r from-primary to-secondary p-4 sm:p-6 text-white overflow-hidden">
             <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-white/10 rounded-full blur-2xl"></div>
             <div className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-white/10 rounded-full blur-xl"></div>
-            
+
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <motion.div
@@ -186,8 +195,12 @@ const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
                   <Shield className="w-4 h-4 sm:w-6 sm:h-6" />
                 </motion.div>
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold">Verify Your Number</h3>
-                  <p className="text-white/80 text-xs sm:text-sm">Enter the 6-digit code</p>
+                  <h3 className="text-lg sm:text-xl font-bold">
+                    Verify Your Number
+                  </h3>
+                  <p className="text-white/80 text-xs sm:text-sm">
+                    Enter the 6-digit code
+                  </p>
                 </div>
               </div>
               <motion.button
@@ -260,7 +273,7 @@ const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
                 </motion.p>
               )}
 
-              {otp.every(digit => digit !== "") && !error && (
+              {otp.every((digit) => digit !== "") && !error && (
                 <motion.p
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -288,9 +301,9 @@ const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
                 Clear
               </motion.button>
               <motion.button
-                whileHover={{ 
-                  scale: 1.02, 
-                  boxShadow: "0 10px 25px rgba(95, 111, 255, 0.3)" 
+                whileHover={{
+                  scale: 1.02,
+                  boxShadow: "0 10px 25px rgba(95, 111, 255, 0.3)",
                 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleSubmit}
@@ -326,7 +339,9 @@ const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
               <div className="flex items-start gap-2 sm:gap-3">
                 <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mt-0.5" />
                 <div>
-                  <p className="text-xs sm:text-sm font-medium text-blue-900">Secure Verification</p>
+                  <p className="text-xs sm:text-sm font-medium text-blue-900">
+                    Secure Verification
+                  </p>
                   <p className="text-xs text-blue-700 mt-1">
                     This code expires in 5 minutes for your security.
                   </p>

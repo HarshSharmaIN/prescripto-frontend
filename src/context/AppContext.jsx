@@ -10,7 +10,7 @@ export const AppContext = createContext();
 const AppContextProvider = (props) => {
   const currSymbol = "₹";
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  
+
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [doctors, setDoctors] = useState([]);
@@ -23,12 +23,12 @@ const AppContextProvider = (props) => {
   );
 
   const calculateAge = (dob) => {
-    const today = new Date()
-    const birthDate = new Date(dob)
-    
-    let age = today.getFullYear() - birthDate.getFullYear()
-    return age
-}
+    const today = new Date();
+    const birthDate = new Date(dob);
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    return age;
+  };
 
   const getDoctorsData = async () => {
     try {
@@ -92,6 +92,9 @@ const AppContextProvider = (props) => {
       const { data } = await axios.post(backendUrl + "/api/user/google-login", {
         credential,
       });
+      console.log(credential);
+      
+      console.log(data);
 
       if (data.success) {
         localStorage.setItem("token", data.token);
@@ -126,7 +129,6 @@ const AppContextProvider = (props) => {
       dateArray[0] + " " + months[Number(dateArray[1])] + " " + dateArray[2]
     );
   };
-
 
   const getUserAppointments = async () => {
     try {
@@ -275,7 +277,8 @@ const AppContextProvider = (props) => {
     appointments,
     getUserAppointments,
     joinMeeting,
-    isLoading, setIsLoading
+    isLoading,
+    setIsLoading,
   };
 
   useEffect(() => {

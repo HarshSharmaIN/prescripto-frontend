@@ -58,7 +58,7 @@ const Home = () => {
           }}
           whileTap={{ scale: 0.9 }}
           onClick={handleOpenChat}
-          className="bg-gradient-to-r from-primary via-secondary to-accent text-white p-4 rounded-full shadow-2xl hover:shadow-primary/25 transition-all duration-300 relative overflow-hidden group"
+          className={`${showChatWindow && "hidden"} bg-gradient-to-r from-primary via-secondary to-accent text-white p-4 rounded-full shadow-2xl hover:shadow-primary/25 transition-all duration-300 relative overflow-hidden group`}
         >
           {/* Animated background */}
           <motion.div
@@ -68,7 +68,7 @@ const Home = () => {
           />
           
           {/* Button content */}
-          <div className="relative z-10 flex items-center justify-center">
+          <div className={`relative z-10 flex items-center justify-center`}>
             <motion.div
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}

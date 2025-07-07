@@ -213,7 +213,7 @@ const Header = () => {
               whileHover={{ scale: 1.02 }}
               src={assets.header_img}
               alt="Healthcare professionals"
-              className="w-full h-auto rounded-2xl sm:rounded-3xl shadow-2xl"
+              className="w-full h-auto rounded-2xl sm:rounded-3xl"
             />
             
             {/* Enhanced Floating Elements - Responsive */}

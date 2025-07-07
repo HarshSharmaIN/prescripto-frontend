@@ -1,7 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Star, MapPin, Clock, Calendar, Shield, Award, ArrowRight, Sparkles } from "lucide-react";
+import {
+  Star,
+  MapPin,
+  Clock,
+  Calendar,
+  Shield,
+  Award,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 
@@ -141,19 +150,19 @@ const Appointment = () => {
         {/* Background Decoration */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <motion.div
-            animate={{ 
+            animate={{
               scale: [1, 1.2, 1],
               rotate: [0, 180, 360],
-              x: [0, 30, 0]
+              x: [0, 30, 0],
             }}
             transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
             className="absolute top-20 left-10 w-48 h-48 sm:w-64 sm:h-64 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-full blur-3xl"
           />
           <motion.div
-            animate={{ 
+            animate={{
               scale: [1.1, 1, 1.1],
               rotate: [360, 180, 0],
-              y: [0, -20, 0]
+              y: [0, -20, 0],
             }}
             transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
             className="absolute bottom-20 right-10 w-56 h-56 sm:w-72 sm:h-72 bg-gradient-to-r from-accent/5 to-primary/5 rounded-full blur-3xl"
@@ -228,7 +237,9 @@ const Appointment = () => {
                     className="flex items-center gap-2 bg-gradient-to-r from-accent/10 to-primary/10 px-3 sm:px-4 py-2 rounded-xl sm:rounded-2xl border border-accent/20"
                   >
                     <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
-                    <span className="font-semibold text-neutral-700 text-sm sm:text-base">{docInfo.experience}</span>
+                    <span className="font-semibold text-neutral-700 text-sm sm:text-base">
+                      {docInfo.experience}
+                    </span>
                   </motion.div>
                 </div>
 
@@ -240,7 +251,9 @@ const Appointment = () => {
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                    <h3 className="text-base sm:text-lg font-bold text-neutral-800">About Doctor</h3>
+                    <h3 className="text-base sm:text-lg font-bold text-neutral-800">
+                      About Doctor
+                    </h3>
                   </div>
                   <p className="text-neutral-600 leading-relaxed text-sm sm:text-base lg:text-lg text-center sm:text-left">
                     {docInfo.about}
@@ -253,13 +266,20 @@ const Appointment = () => {
                 >
                   <div className="flex items-center gap-2">
                     <Star className="w-5 h-5 sm:w-6 sm:h-6 fill-yellow-400 text-yellow-400" />
-                    <span className="text-xl sm:text-2xl font-bold text-neutral-800">4.8</span>
-                    <span className="text-neutral-600 text-sm sm:text-base">(124 reviews)</span>
+                    <span className="text-xl sm:text-2xl font-bold text-neutral-800">
+                      4.8
+                    </span>
+                    <span className="text-neutral-600 text-sm sm:text-base">
+                      (124 reviews)
+                    </span>
                   </div>
                   <div className="w-px h-6 bg-neutral-300 hidden sm:block"></div>
                   <div className="text-xl sm:text-2xl font-bold text-neutral-800 text-center sm:text-left">
-                    {currSymbol}{docInfo.fees}
-                    <span className="text-base sm:text-lg font-normal text-neutral-600 ml-1">/ session</span>
+                    {currSymbol}
+                    {docInfo.fees}
+                    <span className="text-base sm:text-lg font-normal text-neutral-600 ml-1">
+                      / session
+                    </span>
                   </div>
                 </motion.div>
               </div>
@@ -283,7 +303,9 @@ const Appointment = () => {
 
             {/* Date Selection */}
             <div className="mb-6 sm:mb-8">
-              <h3 className="text-base sm:text-lg font-semibold text-neutral-700 mb-3 sm:mb-4 text-center sm:text-left">Select Date:</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-neutral-700 mb-3 sm:mb-4 text-center sm:text-left">
+                Select Date:
+              </h3>
               <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-4 px-2 sm:px-0">
                 {docSlots.length &&
                   docSlots.map((item, index) => (
@@ -311,7 +333,9 @@ const Appointment = () => {
 
             {/* Time Selection */}
             <div className="mb-6 sm:mb-8">
-              <h3 className="text-base sm:text-lg font-semibold text-neutral-700 mb-3 sm:mb-4 text-center sm:text-left">Select Time:</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-neutral-700 mb-3 sm:mb-4 text-center sm:text-left">
+                Select Time:
+              </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3">
                 {docSlots.length &&
                   docSlots[slotIndex].map((item, index) => (
@@ -334,10 +358,10 @@ const Appointment = () => {
 
             {/* Book Button */}
             <motion.button
-              whileHover={{ 
-                scale: 1.02, 
+              whileHover={{
+                scale: 1.02,
                 boxShadow: "0 15px 30px rgba(95, 111, 255, 0.3)",
-                y: -2
+                y: -2,
               }}
               whileTap={{ scale: 0.98 }}
               onClick={bookAppointment}
@@ -370,11 +394,14 @@ const Appointment = () => {
               <Star className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-500" />
               Patient Reviews
             </motion.h2>
-            {docInfo.reviews && docInfo.reviews.length > 0 ? (
+            {docInfo.reviews &&
+            docInfo.reviews.some((r) => Object.keys(r).length > 0) ? (
               <div className="space-y-4 sm:space-y-6">
-                {docInfo.reviews.map((review, index) => (
-                  <Review key={index} review={review} />
-                ))}
+                {docInfo.reviews
+                  .filter((review) => Object.keys(review).length > 0)
+                  .map((review, index) => (
+                    <Review key={index} review={review} />
+                  ))}
               </div>
             ) : (
               <motion.div
@@ -383,17 +410,21 @@ const Appointment = () => {
                 className="text-center py-8 sm:py-12 bg-white/50 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-neutral-200"
               >
                 <motion.div
-                  animate={{ 
+                  animate={{
                     scale: [1, 1.1, 1],
-                    rotate: [0, 5, -5, 0]
+                    rotate: [0, 5, -5, 0],
                   }}
                   transition={{ duration: 3, repeat: Infinity }}
                   className="text-4xl sm:text-6xl mb-3 sm:mb-4"
                 >
                   ⭐
                 </motion.div>
-                <h3 className="text-lg sm:text-xl font-semibold text-neutral-700 mb-2">No Reviews Yet</h3>
-                <p className="text-neutral-500 text-sm sm:text-base">Be the first to share your experience!</p>
+                <h3 className="text-lg sm:text-xl font-semibold text-neutral-700 mb-2">
+                  No Reviews Yet
+                </h3>
+                <p className="text-neutral-500 text-sm sm:text-base">
+                  Be the first to share your experience!
+                </p>
               </motion.div>
             )}
           </motion.div>

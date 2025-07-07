@@ -9,7 +9,7 @@ function ChatInterface({
   handleSubmit,
   chatContainerRef,
   showRecommendDoctorsButton,
-  handleShowRecommendedDoctors
+  handleShowRecommendedDoctors,
 }) {
   return (
     <div className="bg-gradient-to-b from-neutral-50 to-white overflow-hidden">
@@ -39,7 +39,7 @@ function ChatInterface({
             </p>
           </motion.div>
         )}
-        
+
         {messages.map((message, index) => (
           <motion.div
             key={message.id}
@@ -67,12 +67,12 @@ function ChatInterface({
               <motion.div
                 animate={{ rotate: [0, 10, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity }}
-                className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2"
+                className="absolute right-2 sm:right-3 top-3"
               >
                 <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-400" />
               </motion.div>
             </div>
-            
+
             <div className="flex gap-2">
               <motion.button
                 type="submit"
@@ -83,7 +83,7 @@ function ChatInterface({
                 <Send className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span>Send</span>
               </motion.button>
-              
+
               {showRecommendDoctorsButton && (
                 <motion.button
                   initial={{ opacity: 0, scale: 0.8 }}

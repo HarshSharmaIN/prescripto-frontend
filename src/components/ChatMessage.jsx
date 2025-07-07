@@ -1,13 +1,13 @@
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { Bot, User, Sparkles } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useContext } from 'react';
-import { AppContext } from '../context/AppContext';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { Bot, User, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
 export const ChatMessage = ({ message }) => {
   const { Loader } = useContext(AppContext);
-  const isBot = message.sender === 'bot';
+  const isBot = message.sender === "bot";
 
   if (message.isLoading) {
     return (
@@ -44,19 +44,19 @@ export const ChatMessage = ({ message }) => {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`flex ${isBot ? 'justify-start' : 'justify-end'} mb-3 sm:mb-4`}
+      className={`flex ${isBot ? "justify-start" : "justify-end"} mb-3 sm:mb-4`}
     >
       <div
         className={`flex items-start gap-2 sm:gap-3 max-w-[85%] ${
-          isBot ? 'flex-row' : 'flex-row-reverse'
+          isBot ? "flex-row" : "flex-row-reverse"
         }`}
       >
         <motion.div
           whileHover={{ scale: 1.1 }}
           className={`w-6 h-6 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center border-2 ${
             isBot
-              ? 'bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/20'
-              : 'bg-gradient-to-br from-green-100 to-emerald-100 border-green-200'
+              ? "bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/20"
+              : "bg-gradient-to-br from-green-100 to-emerald-100 border-green-200"
           }`}
         >
           {isBot ? (
@@ -65,13 +65,13 @@ export const ChatMessage = ({ message }) => {
             <User className="w-3 h-3 sm:w-5 sm:h-5 text-green-600" />
           )}
         </motion.div>
-        
+
         <motion.div
           whileHover={{ scale: 1.02 }}
           className={`px-3 sm:px-6 py-2 sm:py-4 rounded-xl sm:rounded-2xl shadow-sm border relative ${
             isBot
-              ? 'bg-gradient-to-r from-neutral-50 to-white border-neutral-200 text-neutral-800'
-              : 'bg-gradient-to-r from-primary to-secondary text-white border-primary/20'
+              ? "bg-gradient-to-r from-neutral-50 to-white border-neutral-200 text-neutral-800"
+              : "bg-gradient-to-r from-primary to-secondary text-white border-primary/20"
           }`}
         >
           {/* Message Content */}
@@ -81,14 +81,16 @@ export const ChatMessage = ({ message }) => {
               remarkPlugins={[remarkGfm]}
             />
           </div>
-          
+
           {/* Timestamp */}
-          <div className={`text-xs mt-1 sm:mt-2 ${
-            isBot ? 'text-neutral-500' : 'text-white/70'
-          }`}>
-            {message.timestamp.toLocaleTimeString([], { 
-              hour: '2-digit', 
-              minute: '2-digit' 
+          <div
+            className={`text-xs mt-1 sm:mt-2 ${
+              isBot ? "text-neutral-500" : "text-white/70"
+            }`}
+          >
+            {message.timestamp.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
             })}
           </div>
 

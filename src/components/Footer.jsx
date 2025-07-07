@@ -1,6 +1,15 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Heart, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Heart,
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+} from "lucide-react";
 
 import { assets } from "../assets/assets";
 
@@ -10,23 +19,23 @@ const Footer = () => {
   const footerSections = [
     {
       title: "COMPANY",
-      links: ["Home", "About us", "Contact us", "Privacy Policy"]
+      links: ["Home", "About us", "Contact us", "Privacy Policy"],
     },
     {
       title: "GET IN TOUCH",
       links: [
         { icon: Phone, text: "+91 012 345 6789" },
         { icon: Mail, text: "admin@prescripto.com" },
-        { icon: MapPin, text: "Bidhannagar, Durgapur" }
-      ]
-    }
+        { icon: MapPin, text: "Bidhannagar, Durgapur" },
+      ],
+    },
   ];
 
   const socialIcons = [
     { icon: Facebook, href: "#" },
     { icon: Twitter, href: "#" },
     { icon: Instagram, href: "#" },
-    { icon: Linkedin, href: "#" }
+    { icon: Linkedin, href: "#" },
   ];
 
   return (
@@ -57,16 +66,21 @@ const Footer = () => {
             >
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
-                  <img src={assets.logo} alt="Logo" className="w-8 h-8 brightness-0 invert" />
+                  <img
+                    src={assets.logo}
+                    alt="Logo"
+                    className="w-8 h-8 brightness-0 invert"
+                  />
                 </div>
                 <span className="text-2xl font-bold">Prescripto</span>
               </div>
-              
+
               <p className="text-neutral-300 leading-relaxed text-lg">
-                Your trusted partner in managing healthcare needs conveniently and efficiently. 
-                We connect you with the best medical professionals for comprehensive care.
+                Your trusted partner in managing healthcare needs conveniently
+                and efficiently. We connect you with the best medical
+                professionals for comprehensive care.
               </p>
-              
+
               <div className="flex space-x-4">
                 {socialIcons.map((social, index) => (
                   <motion.a
@@ -111,7 +125,9 @@ const Footer = () => {
                           <span className="text-lg">{link.text}</span>
                         </>
                       ) : (
-                        <span className="text-lg hover:text-primary transition-colors">{link}</span>
+                        <span className="text-lg hover:text-primary transition-colors">
+                          {link}
+                        </span>
                       )}
                     </motion.li>
                   ))}
@@ -119,34 +135,6 @@ const Footer = () => {
               </motion.div>
             ))}
           </div>
-
-          {/* Newsletter Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="mt-16 p-8 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-3xl border border-white/10"
-          >
-            <div className="text-center space-y-4">
-              <h3 className="text-2xl font-bold text-white">Stay Updated</h3>
-              <p className="text-neutral-300 text-lg">Subscribe to our newsletter for health tips and updates</p>
-              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 px-6 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold hover:shadow-lg transition-all"
-                >
-                  Subscribe
-                </motion.button>
-              </div>
-            </div>
-          </motion.div>
 
           {/* Bottom Section */}
           <motion.div
@@ -161,11 +149,6 @@ const Footer = () => {
                 Copyright © {currentYear} Harsh Sharma - All Rights Reserved
                 <Heart className="w-5 h-5 text-red-500 animate-pulse" />
               </p>
-              <div className="flex space-x-8 text-lg text-neutral-400">
-                <span className="hover:text-white transition-colors cursor-pointer">Terms of Service</span>
-                <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
-                <span className="hover:text-white transition-colors cursor-pointer">Cookie Policy</span>
-              </div>
             </div>
           </motion.div>
         </div>
