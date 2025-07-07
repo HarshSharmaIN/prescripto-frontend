@@ -78,8 +78,45 @@
   }
 }
 
+/* Stream Video Call Controls Responsive Styling */
 .str-video__call-controls {
-  gap: 2vw;
+  gap: 0.5rem !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+}
+
+@media (min-width: 640px) {
+  .str-video__call-controls {
+    gap: 1rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .str-video__call-controls {
+    gap: 2vw !important;
+  }
+}
+
+.str-video__call-controls button {
+  min-width: 40px !important;
+  min-height: 40px !important;
+  border-radius: 12px !important;
+}
+
+@media (min-width: 640px) {
+  .str-video__call-controls button {
+    min-width: 48px !important;
+    min-height: 48px !important;
+    border-radius: 16px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .str-video__call-controls button {
+    min-width: 56px !important;
+    min-height: 56px !important;
+    border-radius: 20px !important;
+  }
 }
 
 .str-video__composite-button[title="Record call"] {
@@ -167,5 +204,49 @@
   
   .touch-target {
     @apply min-h-[44px] min-w-[44px];
+  }
+}
+
+/* Google Login Button Styling */
+.google-login-button {
+  width: 100% !important;
+  border-radius: 16px !important;
+  border: 2px solid #e5e7eb !important;
+  transition: all 0.3s ease !important;
+}
+
+.google-login-button:hover {
+  border-color: #5f6fff !important;
+  transform: scale(1.02) !important;
+}
+
+/* Stream Video Participant View Responsive */
+.str-video__participant-view {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+@media (min-width: 640px) {
+  .str-video__participant-view {
+    border-radius: 16px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .str-video__participant-view {
+    border-radius: 24px !important;
+  }
+}
+
+/* Meeting Room Mobile Optimizations */
+@media (max-width: 640px) {
+  .str-video__call-controls-wrapper {
+    padding: 0.5rem !important;
+  }
+  
+  .str-video__participant-view video {
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
   }
 }
