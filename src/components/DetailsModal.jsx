@@ -16,8 +16,10 @@ const DetailsModal = ({ phoneNumber, onClose }) => {
   const { backendUrl, Loader, setToken } = useContext(AppContext);
 
   const handleSubmit = async () => {
+    if (!userDetails.name || !userDetails.email)
+      return toast.error("Fill all details");
+    setLoading(true);
     try {
-      setLoading(true);
       const { data } = await axios.post(
         backendUrl + "/api/user/update-details",
         { userDetails }
@@ -67,19 +69,19 @@ const DetailsModal = ({ phoneNumber, onClose }) => {
           {/* Animated Background Elements */}
           <div className="absolute inset-0 overflow-hidden">
             <motion.div
-              animate={{ 
+              animate={{
                 scale: [1, 1.2, 1],
                 rotate: [0, 180, 360],
-                x: [0, 30, 0]
+                x: [0, 30, 0],
               }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               className="absolute top-10 right-10 w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full blur-2xl"
             />
             <motion.div
-              animate={{ 
+              animate={{
                 scale: [1.1, 1, 1.1],
                 rotate: [360, 180, 0],
-                y: [0, -20, 0]
+                y: [0, -20, 0],
               }}
               transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
               className="absolute bottom-10 left-10 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-r from-accent/10 to-primary/10 rounded-full blur-xl"
@@ -90,7 +92,7 @@ const DetailsModal = ({ phoneNumber, onClose }) => {
           <div className="relative bg-gradient-to-r from-primary to-secondary p-4 sm:p-6 text-white overflow-hidden">
             <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-white/10 rounded-full blur-2xl"></div>
             <div className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-white/10 rounded-full blur-xl"></div>
-            
+
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <motion.div
@@ -101,8 +103,12 @@ const DetailsModal = ({ phoneNumber, onClose }) => {
                   <User className="w-4 h-4 sm:w-6 sm:h-6" />
                 </motion.div>
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold">Complete Your Profile</h3>
-                  <p className="text-white/80 text-xs sm:text-sm">Just a few more details</p>
+                  <h3 className="text-lg sm:text-xl font-bold">
+                    Complete Your Profile
+                  </h3>
+                  <p className="text-white/80 text-xs sm:text-sm">
+                    Just a few more details
+                  </p>
                 </div>
               </div>
               <motion.button
@@ -126,7 +132,8 @@ const DetailsModal = ({ phoneNumber, onClose }) => {
               className="text-center"
             >
               <p className="text-sm sm:text-base text-neutral-600 leading-relaxed">
-                Welcome! Please provide your details to complete your account setup.
+                Welcome! Please provide your details to complete your account
+                setup.
               </p>
             </motion.div>
 
@@ -150,7 +157,12 @@ const DetailsModal = ({ phoneNumber, onClose }) => {
                     placeholder="Enter your full name"
                     className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 border-2 border-neutral-200 rounded-lg sm:rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 bg-white/80 backdrop-blur-sm text-sm sm:text-base"
                     value={userDetails.name}
-                    onChange={(e) => setUserDetails((prev) => ({...prev, name: e.target.value}))}
+                    onChange={(e) =>
+                      setUserDetails((prev) => ({
+                        ...prev,
+                        name: e.target.value,
+                      }))
+                    }
                   />
                 </div>
               </div>
@@ -168,7 +180,12 @@ const DetailsModal = ({ phoneNumber, onClose }) => {
                     placeholder="Enter your email address"
                     className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 border-2 border-neutral-200 rounded-lg sm:rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 bg-white/80 backdrop-blur-sm text-sm sm:text-base"
                     value={userDetails.email}
-                    onChange={(e) => setUserDetails((prev) => ({...prev, email: e.target.value}))}
+                    onChange={(e) =>
+                      setUserDetails((prev) => ({
+                        ...prev,
+                        email: e.target.value,
+                      }))
+                    }
                   />
                 </div>
               </div>
@@ -215,9 +232,9 @@ const DetailsModal = ({ phoneNumber, onClose }) => {
                 Cancel
               </motion.button>
               <motion.button
-                whileHover={{ 
-                  scale: 1.02, 
-                  boxShadow: "0 10px 25px rgba(95, 111, 255, 0.3)" 
+                whileHover={{
+                  scale: 1.02,
+                  boxShadow: "0 10px 25px rgba(95, 111, 255, 0.3)",
                 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleSubmit}
@@ -253,9 +270,12 @@ const DetailsModal = ({ phoneNumber, onClose }) => {
               <div className="flex items-start gap-2 sm:gap-3">
                 <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mt-0.5" />
                 <div>
-                  <p className="text-xs sm:text-sm font-medium text-blue-900">Privacy Protected</p>
+                  <p className="text-xs sm:text-sm font-medium text-blue-900">
+                    Privacy Protected
+                  </p>
                   <p className="text-xs text-blue-700 mt-1">
-                    Your information is encrypted and secure. We never share your data.
+                    Your information is encrypted and secure. We never share
+                    your data.
                   </p>
                 </div>
               </div>

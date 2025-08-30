@@ -72,25 +72,26 @@ const App = () => {
       />
       <Navbar />
       <div className="mx-[5%]">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/doctors" element={<Doctors />} />
-        <Route path="/doctors/:speciality" element={<Doctors />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/meeting" element={<MeetingRoom />} />
-        <Route path="/my-appointments" element={<MyAppointment />} />
-        <Route
-          path="/my-appointments/:appointmentId"
-          element={<AppointmentPage />}
-        />
-        <Route path="/appointments/:docId" element={<Appointment />} />
-        <Route path="/blogs" element={<DoctorBlogs />} />
-        <Route path="/blog/:blogId" element={<Blog />} />
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/doctors" element={<Doctors />} />
+          <Route path="/doctors/:speciality" element={<Doctors />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/meeting" element={<MeetingRoom />} />
+          <Route path="/my-appointments" element={<MyAppointment />} />
+          <Route
+            path="/my-appointments/:appointmentId"
+            element={<AppointmentPage />}
+          />
+          <Route path="/appointments/:docId" element={<Appointment />} />
+          <Route path="/blogs" element={<DoctorBlogs />} />
+          <Route path="/blog/:blogId" element={<Blog />} />
+        </Routes>
       </div>
+      <div id="recaptcha-container"></div>
       <Footer />
     </div>
   );

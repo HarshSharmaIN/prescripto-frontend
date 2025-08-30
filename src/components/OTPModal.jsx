@@ -13,14 +13,21 @@ import { assets } from "../assets/assets";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
 import { toast } from "react-toastify";
+import { signInWithPhoneNumber } from "firebase/auth";
 
-const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
+const OTPModal = ({
+  phoneNumber,
+  onClose,
+  setIsDetailsModalOpen,
+  confirmationResult: prevResult,
+}) => {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const inputRefs = useRef([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [resendLoading, setResendLoading] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
+  const [confirmationResult, setConfirmationResult] = useState(prevResult);
 
   const { backendUrl, Loader, setToken } = useContext(AppContext);
 
@@ -79,24 +86,25 @@ const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
     }
   };
 
+  // The handleResendCode function
   const handleResendCode = async () => {
     try {
       setResendLoading(true);
 
-      const { data } = await axios.post(backendUrl + "/api/user/generate-otp", {
-        phone: phoneNumber,
-      });
+      const appVerifier = window.recaptchaVerifier;
 
-      if (data.success) {
-        toast.success("OTP resent successfully!");
-        setResendCooldown(30); // 30 second cooldown
-        setError("");
-        handleClearOTP();
-      } else {
-        toast.error(data.message);
-      }
+      const confirmationResult = await signInWithPhoneNumber(
+        phoneNumber,
+        appVerifier
+      );
+      setConfirmationResult(confirmationResult);
+
+      toast.success("OTP resent successfully!");
+      setResendCooldown(30);
+      setError("");
+      handleClearOTP();
     } catch (error) {
-      console.log(error.message);
+      console.error("Firebase error:", error.message);
       toast.error("Failed to resend OTP. Please try again.");
     } finally {
       setResendLoading(false);
@@ -104,13 +112,13 @@ const OTPModal = ({ phoneNumber, onClose, setIsDetailsModalOpen }) => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const enteredOTP = otp.join("");
+      const result = await confirmationResult.confirm(otp.join(""));
+      const user = result.user;
 
-      const { data } = await axios.post(backendUrl + "/api/user/phone-login", {
-        phone: phoneNumber,
-        otp: enteredOTP,
+      const { data } = await axios.post(backendUrl + "/api/user/check-user", {
+        phoneNumber: user.phoneNumber,
       });
 
       if (data.success) {

@@ -1,34 +1,58 @@
-import React, { useContext, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Phone, Shield, Clock, CheckCircle } from 'lucide-react';
-import toast from 'react-hot-toast';
-import axios from 'axios';
+import React, { useContext, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Phone, Shield, Clock, CheckCircle } from "lucide-react";
+import toast from "react-hot-toast";
 
-import OTPModal from './OTPModal';
-import { assets } from '../assets/assets';
-import { AppContext } from '../context/AppContext';
-import DetailsModal from './DetailsModal';
+import OTPModal from "./OTPModal";
+import { assets } from "../assets/assets";
+import { AppContext } from "../context/AppContext";
+import DetailsModal from "./DetailsModal";
+import app from "../lib/firebase";
+import {
+  getAuth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from "firebase/auth";
 
 const PhoneInputModal = ({ onClose }) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [isOTPModalOpen, setIsOTPModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const [confirmationResult, setConfirmationResult] = useState(null);
 
-  const { backendUrl, Loader } = useContext(AppContext);
+  const { Loader } = useContext(AppContext);
+  const auth = getAuth(app);
 
   const features = [
     { icon: Shield, text: "Secure & Safe" },
     { icon: Clock, text: "Quick Verification" },
-    { icon: CheckCircle, text: "Instant Access" }
+    { icon: CheckCircle, text: "Instant Access" },
   ];
 
+  const setupRecaptcha = () => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: () => console.log("reCAPTCHA solved"),
+        }
+      );
+
+      window.recaptchaVerifier.render().then((widgetId) => {
+        window.recaptchaWidgetId = widgetId;
+      });
+    }
+  };
+
   const handlePhoneNumberChange = (event) => {
-    const value = event.target.value.replace(/\D/g, '');
+    const value = event.target.value.replace(/\D/g, "");
     if (value.length <= 10) {
       setPhoneNumber(value);
-      setError('');
+      setError("");
     }
   };
 
@@ -37,21 +61,28 @@ const PhoneInputModal = ({ onClose }) => {
       setLoading(true);
 
       if (phoneNumber.length !== 10) {
-        setError('Please enter a valid 10-digit phone number');
+        setError("Please enter a valid 10-digit phone number");
         return;
       }
 
-      const { data } = await axios.post(backendUrl + '/api/user/generate-otp', { phone: phoneNumber });
+      setupRecaptcha();
+      const appVerifier = window.recaptchaVerifier;
 
-      if (data.success) {
-        toast.success(data.message);
-        setIsOTPModalOpen(true);
-      } else {
-        toast.error(data.message);
-      }
+      const result = await signInWithPhoneNumber(
+        auth,
+        `+91${phoneNumber}`,
+        appVerifier
+      );
+
+      setConfirmationResult(result);
+      toast.success("OTP sent successfully!");
+      setIsOTPModalOpen(true);
     } catch (error) {
       console.log(error.message);
       toast.error(error.message);
+      if (window.recaptchaWidgetId !== undefined) {
+        grecaptcha.reset(window.recaptchaWidgetId);
+      }
     } finally {
       setLoading(false);
     }
@@ -97,15 +128,19 @@ const PhoneInputModal = ({ onClose }) => {
           <div className="bg-gradient-to-r from-primary to-secondary p-4 sm:p-6 text-white relative overflow-hidden">
             <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-white/10 rounded-full blur-2xl"></div>
             <div className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-white/10 rounded-full blur-xl"></div>
-            
+
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <div className="w-8 h-8 sm:w-12 sm:h-12 bg-white/20 rounded-lg sm:rounded-xl flex items-center justify-center">
                   <Phone className="w-4 h-4 sm:w-6 sm:h-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold">Phone Verification</h3>
-                  <p className="text-white/80 text-xs sm:text-sm">Secure login with OTP</p>
+                  <h3 className="text-lg sm:text-xl font-bold">
+                    Phone Verification
+                  </h3>
+                  <p className="text-white/80 text-xs sm:text-sm">
+                    Secure login with OTP
+                  </p>
                 </div>
               </div>
               <motion.button
@@ -134,7 +169,9 @@ const PhoneInputModal = ({ onClose }) => {
                   <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-1 sm:mb-2">
                     <feature.icon className="w-4 h-4 sm:w-6 sm:h-6 text-primary" />
                   </div>
-                  <p className="text-xs font-medium text-neutral-600">{feature.text}</p>
+                  <p className="text-xs font-medium text-neutral-600">
+                    {feature.text}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -149,11 +186,17 @@ const PhoneInputModal = ({ onClose }) => {
               <label className="block text-sm font-semibold text-neutral-700">
                 Enter your mobile number
               </label>
-              
+
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">
-                  <img src={assets.flag} alt="India" className="w-4 h-3 sm:w-6 sm:h-4 mr-1 sm:mr-2" />
-                  <span className="text-neutral-600 font-medium text-sm sm:text-base">+91</span>
+                  <img
+                    src={assets.flag}
+                    alt="India"
+                    className="w-4 h-3 sm:w-6 sm:h-4 mr-1 sm:mr-2"
+                  />
+                  <span className="text-neutral-600 font-medium text-sm sm:text-base">
+                    +91
+                  </span>
                   <div className="w-px h-4 sm:h-6 bg-neutral-300 mx-2 sm:mx-3"></div>
                 </div>
                 <input
@@ -207,7 +250,10 @@ const PhoneInputModal = ({ onClose }) => {
                 Cancel
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.02, boxShadow: "0 10px 25px rgba(95, 111, 255, 0.3)" }}
+                whileHover={{
+                  scale: 1.02,
+                  boxShadow: "0 10px 25px rgba(95, 111, 255, 0.3)",
+                }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleGetOTPRequest}
                 disabled={phoneNumber.length !== 10 || loading}
@@ -220,7 +266,7 @@ const PhoneInputModal = ({ onClose }) => {
                   transition={{ duration: 0.6 }}
                 />
                 <span className="relative z-10">
-                  {loading ? <Loader color="#fff" /> : 'Send OTP'}
+                  {loading ? <Loader color="#fff" /> : "Send OTP"}
                 </span>
               </motion.button>
             </motion.div>
@@ -235,9 +281,12 @@ const PhoneInputModal = ({ onClose }) => {
               <div className="flex items-start gap-2 sm:gap-3">
                 <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mt-0.5" />
                 <div>
-                  <p className="text-xs sm:text-sm font-medium text-blue-900">Secure & Private</p>
+                  <p className="text-xs sm:text-sm font-medium text-blue-900">
+                    Secure & Private
+                  </p>
                   <p className="text-xs text-blue-700 mt-1">
-                    Your phone number is encrypted and never shared with third parties.
+                    Your phone number is encrypted and never shared with third
+                    parties.
                   </p>
                 </div>
               </div>
@@ -247,16 +296,17 @@ const PhoneInputModal = ({ onClose }) => {
 
         {/* Modals */}
         {isOTPModalOpen && (
-          <OTPModal 
-            phoneNumber={'+91' + phoneNumber} 
-            onClose={handleCloseOTPModal} 
-            setIsDetailsModalOpen={setIsDetailsModalOpen} 
+          <OTPModal
+            phoneNumber={"+91" + phoneNumber}
+            onClose={handleCloseOTPModal}
+            setIsDetailsModalOpen={setIsDetailsModalOpen}
+            confirmationResult={confirmationResult}
           />
         )}
         {isDetailsModalOpen && (
-          <DetailsModal 
-            phoneNumber={'+91' + phoneNumber} 
-            onClose={handleCloseDetailsModal} 
+          <DetailsModal
+            phoneNumber={"+91" + phoneNumber}
+            onClose={handleCloseDetailsModal}
           />
         )}
       </motion.div>
