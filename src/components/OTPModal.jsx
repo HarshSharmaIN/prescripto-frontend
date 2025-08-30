@@ -13,7 +13,8 @@ import { assets } from "../assets/assets";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
 import { toast } from "react-toastify";
-import { signInWithPhoneNumber } from "firebase/auth";
+import { getAuth, signInWithPhoneNumber } from "firebase/auth";
+import app from "../lib/firebase";
 
 const OTPModal = ({
   phoneNumber,
@@ -30,6 +31,7 @@ const OTPModal = ({
   const [confirmationResult, setConfirmationResult] = useState(prevResult);
 
   const { backendUrl, Loader, setToken } = useContext(AppContext);
+  const auth = getAuth(app);
 
   useEffect(() => {
     if (inputRefs.current[0]) {
@@ -94,6 +96,7 @@ const OTPModal = ({
       const appVerifier = window.recaptchaVerifier;
 
       const confirmationResult = await signInWithPhoneNumber(
+        auth,
         phoneNumber,
         appVerifier
       );
