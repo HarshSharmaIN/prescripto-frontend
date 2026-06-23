@@ -403,19 +403,7 @@ const Profile = () => {
                   )}
                 </motion.div>
 
-                {/* Member Since */}
-                <motion.div
-                  whileHover={{ x: 5 }}
-                  className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-primary/20"
-                >
-                  <div className="flex items-center gap-2 sm:gap-3">
-                    <Award className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                    <div>
-                      <p className="text-xs sm:text-sm font-semibold text-neutral-600">Member Since</p>
-                      <p className="text-sm sm:text-base lg:text-lg font-medium text-primary">2024</p>
-                    </div>
-                  </div>
-                </motion.div>
+                
               </motion.div>
             </div>
 
